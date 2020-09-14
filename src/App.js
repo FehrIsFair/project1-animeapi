@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './reset.css';
 import Anime from'./Anime';
 import OtherInfo from './OtherInfo';
