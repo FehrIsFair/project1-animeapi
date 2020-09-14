@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import FMABInfo from './data/FMAB.json'
 import './anime.css';
 
@@ -6,11 +6,6 @@ const FMAB = FMABInfo;
 const aliases = FMAB.title_synonyms;
 
 const OtherInfo = () => {
-  
-  const hideElement = element => {
-    if (element.styles === "") element.styles = "display: hide";
-    else element.styles = "";
-  };
 
   return (
     <div>

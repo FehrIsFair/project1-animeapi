@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './reset.css';
 import Anime from'./Anime';
 import OtherInfo from './OtherInfo';
