@@ -4,18 +4,6 @@
 
 This project was a school assignment, copying it for academic use is prohibited.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.
+### A fast and simple way to display info on the anime you want to watch.

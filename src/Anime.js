@@ -31,7 +31,7 @@ class Anime extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="MainComp">
         <h1>{FMAB.title}</h1>
         <div className="flex">
           <img src={FMAB.image_url} alt="Fullmetal Alchemist: Brotherhood promotional art" />

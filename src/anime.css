@@ -26,6 +26,10 @@ h2 {
 .titleContainer {
     border-bottom: 2px black solid;
 }
+.titleContainer h1 {
+    margin: 0;
+    padding: .6rem;
+}
 img {
     margin: .6rem;
 }
@@ -55,4 +59,13 @@ a {
 }
 .DERP {
     border-bottom: black 1px solid;
+}
+#other-titles {
+    border-bottom: 1px black solid;
+}
+#source {
+    border-bottom: 2px black solid;
+}
+.MainComp {
+    border-bottom: 1px black solid;
 }
