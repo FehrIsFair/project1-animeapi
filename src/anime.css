@@ -1,71 +1,39 @@
-.liststyle {
-    list-style: none;
-    padding: 0;
+ul#genreList,
+div#synopsis {
+  display: flex;
 }
-h1 {
-    font-size: 2rem;
-    margin: .6rem;
-}
-h2 {
-    font-size: 1.6rem;
-    margin: .6rem;
-}
-.flex {
-    display: flex;
-}
-.App {
-    margin: 0 auto;
-    width: 1200px;
-    border-right: 2px black solid;
-    border-left: 2px black solid;
-}
-.title {
-    margin: .6rem;
-    font-size: 2.6rem;
-}
-.titleContainer {
-    border-bottom: 2px black solid;
-}
-.titleContainer h1 {
-    margin: 0;
-    padding: .6rem;
-}
-img {
-    margin: .6rem;
-}
-h3 {
-    font-size: 1.4rem;
-    margin: .6rem;
-}
-.synopsis {
-    margin: .6rem;
-}
-#genre {
-    margin: .6rem;
-    display: flex;
 
+div#synopsis img {
+  padding: 2%;
 }
-ul {
-    margin: .6rem;
+
+.App {
+  margin: 0 auto;
+  width: 960px;
 }
-li {
-    margin: .2rem;
+
+h3 {
+  margin: 2% !important;
 }
-.adaptation {
-    margin: .6rem;
+
+#synText {
+  padding: 2%;
 }
-a {
-    text-decoration: none;
+
+.MuiCard-root {
+  margin: 2%;
 }
-.DERP {
-    border-bottom: black 1px solid;
+
+#container {
+  padding: none;
 }
-#other-titles {
-    border-bottom: 1px black solid;
+
+#source,
+#other-titles,
+#genre {
+  padding: 2%;
 }
-#source {
-    border-bottom: 2px black solid;
-}
-.MainComp {
-    border-bottom: 1px black solid;
+
+button {
+  border: 1px solid black;
 }
