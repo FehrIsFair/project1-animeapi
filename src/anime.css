@@ -37,3 +37,22 @@ h3 {
 button {
   border: 1px solid black;
 }
+
+#login {
+  padding: 2%;
+}
+
+#outlined-basic {
+  width: 100% !important;
+}
+form {
+  width: 100%;
+}
+
+#login-form {
+}
+
+.textfield {
+  width: 50%;
+  clear: both;
+}

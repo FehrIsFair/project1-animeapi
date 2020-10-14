@@ -1,5 +1,5 @@
 import React from "react";
-import "./anime.css";
+import "../../anime.css";
 import { Card, Typography, List, ListItem } from "@material-ui/core";
 
 const OtherInfo = (props) => {
