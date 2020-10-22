@@ -6,11 +6,11 @@ import * as serviceWorker from "./serviceWorker";
 import AuthProvider from "./Authentication/Authentication";
 
 ReactDOM.render(
-  <AuthProvider>
-    <React.StrictMode>
+  <React.StrictMode>
+    <AuthProvider>
       <App />
-    </React.StrictMode>
-  </AuthProvider>,
+    </AuthProvider>
+  </React.StrictMode>,
   document.getElementById("root")
 );
 

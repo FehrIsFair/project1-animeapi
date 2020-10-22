@@ -1,65 +1,92 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Card, TextField, Button } from "@material-ui/core";
 import { Authentication } from "../Authentication/Authentication";
+import { useHistory } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
-  let username;
-  let password;
   const authContext = useContext(Authentication);
-  const [loginInfo, setLoginInfo] = useState();
-  const [userName, setUserName] = useState();
-  const [passWord, setPassword] = useState();
 
-  const logIn = () => {
-    setLoginInfo({
-      UserName: userName,
-      password: passWord,
-      loggedIn: authContext.login(),
-    });
-  };
-
-  const getUserName = () => {
-    setUserName(username);
-  };
-
-  const getPassword = () => {
-    setPassword(password);
-  };
-
-  useEffect(() => {
-    const defaultState = () => {
-      setLoginInfo({
-        UserName: "",
-        password: "",
-        loggedIn: false,
-      });
-    };
-    defaultState();
-  }, [setLoginInfo, authContext]);
+  const history = useHistory();
 
   return (
     <Card id="login">
-      <form id="login-form" noValidate autoComplete="off">
-        <TextField
-          id="outlined-basic"
-          className="textfield"
-          label="UserName"
-          variant="outlined"
-          onChange={(e) => getUserName(e.value)}
-          value={username}
-        />
-        <TextField
-          id="outlined-basic"
-          className="textfield"
-          label="Password"
-          variant="outlined"
-          onChange={(e) => getPassword(e.value)}
-          value={password}
-        />
-        <Button className="button" onClick={() => logIn()}>
-          Login
-        </Button>
-      </form>
+      <h4>Login</h4>
+      <Formik
+        initialValues={{
+          Username: "",
+          Password: "",
+          Submit: null,
+        }}
+        validationSchema={Yup.object().shape({
+          Username: Yup.string()
+            .min(10, "Too short")
+            .max(50, "Too long")
+            .required("Must enter an email"),
+          Password: Yup.string()
+            .min(8, "Too short")
+            .max(50, "Too long")
+            .required("Must enter a password"),
+        })}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          try {
+            await authContext.login(values.Username, values.Password);
+            history.push("/Anime");
+            console.log(values.Username, values.Password);
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <TextField
+              autoFocus
+              id="outlined-basic"
+              name="Username"
+              className="textfield"
+              label="UserName"
+              variant="outlined"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.Username}
+              required
+              error={Boolean(touched.Username && errors.Username)}
+              helpertext={touched.Username && errors.Username}
+            />
+            <TextField
+              id="outlined-basic"
+              name="Password"
+              className="textfield"
+              label="Password"
+              variant="outlined"
+              value={values.Password}
+              onBlur={handleBlur}
+              error={Boolean(touched.Password && errors.Password)}
+              helpertext={touched.Password && errors.Password}
+              onChange={handleChange}
+              required
+            />
+            <Button
+              className="button"
+              variant="contained"
+              disabled={errors.Username || errors.Password}
+              type="Submit"
+            >
+              Login
+            </Button>
+          </form>
+        )}
+      </Formik>
     </Card>
   );
 };

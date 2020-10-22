@@ -1,21 +1,48 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
+import { Authentication } from "../Authentication/Authentication";
 import { Link } from "react-router-dom";
+import { Card, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import FailedRender from "../Errors/FailedRender/FailedRender";
 
-const siteNavigation = () => {
-  return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Sign In</Link>
-        </li>
-        <li>
-          <Link to="/SignUp">Sign Up</Link>
-        </li>
-        <li>
-          <Link to="/Anime">Anime</Link>
-        </li>
-      </ul>
-    </div>
-  );
+const useStyles = makeStyles({
+  button: {
+    width: "100%",
+  },
+  listItem: {
+    width: "25%",
+  },
+});
+
+const Navigation = () => {
+  const authContext = useContext(Authentication);
+
+  useEffect(() => {}, [authContext.logout]);
+  if (authContext.isAuth === false)
+    return (
+      <Card className="loggedOut">
+        <ul className="nav">
+          <li className={useStyles.listItem}>
+            <Link to="/">
+              <Button>Sign In</Button>
+            </Link>
+          </li>
+          <li>
+            <Link to="/SignUp">
+              <Button>Sign Up</Button>
+            </Link>
+          </li>
+        </ul>
+      </Card>
+    );
+  if (authContext.isAuth === true)
+    return (
+      <Card className="loggedIn">
+        <Link to="/">
+          <Button onClick={authContext.logout}>Log Out</Button>
+        </Link>
+      </Card>
+    );
+  return <FailedRender />;
 };
-export default siteNavigation;
+export default Navigation;
