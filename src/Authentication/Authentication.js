@@ -4,6 +4,7 @@ export const Authentication = createContext({
   isAuth: false,
   userName: "",
   password: "",
+  favorite: "",
   login: () => {},
   logout: () => {},
 });

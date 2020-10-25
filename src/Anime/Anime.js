@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Card, Button, Typography } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import GenreList from "./GenreList/GenreList";
 import OtherInfo from "./OtherInfo/OtherInfo";
+import { Authentication } from "../Authentication/Authentication";
 //import Related from "./related";
 
 /* The related.js component ended up being handled different based on the
@@ -16,6 +18,7 @@ function Anime() {
 
 const AnimeComp = ({ call }) => {
   const [anime, setAnime] = useState();
+  const authContext = useContext(Authentication);
 
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
@@ -85,6 +88,10 @@ const AnimeComp = ({ call }) => {
     return <div>Loading...</div>;
   }
 
+  if (!authContext.isAuth) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <Card id="container">
       <Button onClick={() => determineState("fmab")}>FMAB</Button>
@@ -96,6 +103,11 @@ const AnimeComp = ({ call }) => {
       <Typography id="animeTitle" variant="h3">
         {anime?.title}
       </Typography>
+      <Card id="score">
+        <Typography>
+          <span className="bold">Rating:</span> {anime?.score}/10
+        </Typography>
+      </Card>
       <Card id="synopsis">
         <img
           src={anime?.image_url}
@@ -110,6 +122,7 @@ const AnimeComp = ({ call }) => {
           <Typography>{anime?.synopsis}</Typography>
         </Card>
       </Card>
+
       <GenreList genres={anime?.genres} />
       <OtherInfo anime={anime} />
     </Card>

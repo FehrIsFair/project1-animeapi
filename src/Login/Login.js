@@ -28,10 +28,15 @@ const Login = () => {
             .min(8, "Too short")
             .max(50, "Too long")
             .required("Must enter a password"),
+          Favorite: Yup.string().min(4, "Too Short").max(100, "Too Long"),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await authContext.login(values.Username, values.Password);
+            await authContext.login(
+              values.Username,
+              values.Password,
+              values.Favorite
+            );
             history.push("/Anime");
             console.log(values.Username, values.Password);
           } catch (err) {
@@ -76,13 +81,25 @@ const Login = () => {
               onChange={handleChange}
               required
             />
+            <TextField
+              id="outlined-basic"
+              name="Favorite"
+              className="textfield"
+              label="Favorite Anime"
+              variant="outlined"
+              value={values.Favorite}
+              onBlur={handleBlur}
+              error={Boolean(touched.Favorite && errors.Favorite)}
+              helpertext={touched.Favorte && errors.Password}
+              onChange={handleChange}
+            />
             <Button
               className="button"
               variant="contained"
               disabled={errors.Username || errors.Password}
               type="Submit"
             >
-              Login
+              Sign Up
             </Button>
           </form>
         )}
