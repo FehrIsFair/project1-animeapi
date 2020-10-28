@@ -16,14 +16,16 @@ const OtherInfo = (props) => {
           </List>
         </Card>
       ) : null}
-      <Card id="source" styles="">
-        <Typography variant="h4">Based on:</Typography>
-        <Typography className="adatation">
-          <a href={props.anime.related.Adaptation[0].url}>
-            {props.anime.related.Adaptation[0].name}
-          </a>
-        </Typography>
-      </Card>
+      {!props.anime.related.Adaptation[0] ? null : (
+        <Card id="source" styles="">
+          <Typography variant="h4">Based on:</Typography>
+          <Typography className="adatation">
+            <a href={props.anime.related.Adaptation[0].url}>
+              {props.anime.related.Adaptation[0].name}
+            </a>
+          </Typography>
+        </Card>
+      )}
     </Card>
   );
 };

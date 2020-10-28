@@ -41,6 +41,9 @@ const Navigation = () => {
         <Link to="/">
           <Button onClick={authContext.logout}>Log Out</Button>
         </Link>
+        <Link to="/Search">
+          <Button>Search</Button>
+        </Link>
       </Card>
     );
   return <FailedRender />;
