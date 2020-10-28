@@ -37,7 +37,7 @@ const Login = () => {
               values.Password,
               values.Favorite
             );
-            history.push("/Anime");
+            history.push("/Search");
             console.log(values.Username, values.Password);
           } catch (err) {
             console.error(err);

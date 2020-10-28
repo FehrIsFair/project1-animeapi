@@ -96,11 +96,38 @@ form div.select {
   margin: 2% !important;
 }
 
-#login-form {
+.result {
 }
 
 .textfield {
   width: 50%;
   margin: 2% !important;
   clear: both;
+}
+
+#searchFunction {
+  display: flex;
+}
+
+#searchFunction button {
+  margin: 2%;
+}
+
+h4.resultTitle {
+  margin: 2%;
+}
+
+.titleScore {
+  display: flex;
+}
+
+.score {
+  font-size: 1.4rem;
+  margin: 2% !important;
+}
+
+.resultImage {
+  float: left;
+  margin: 2%;
+  border: 1px black solid;
 }

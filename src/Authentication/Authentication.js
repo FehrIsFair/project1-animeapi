@@ -5,6 +5,7 @@ export const Authentication = createContext({
   userName: "",
   password: "",
   favorite: "",
+  clickedAnime: "",
   login: () => {},
   logout: () => {},
 });
@@ -14,6 +15,8 @@ const AuthProvider = (props) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [favorite, setFavorite] = useState();
+  const [clicked, setClicked] = useState();
+
   const loginHandler = (_username, _password, _favorite) => {
     setIsAuthenticated(true);
     setUsername(_username);
@@ -25,6 +28,10 @@ const AuthProvider = (props) => {
     setUsername("");
     setPassword("");
     setFavorite("");
+    setClicked("");
+  };
+  const setClickedHandler = (click) => {
+    setClicked(click);
   };
   return (
     <Authentication.Provider
@@ -32,9 +39,11 @@ const AuthProvider = (props) => {
         login: loginHandler,
         isAuth: isAuthenticated,
         logout: logoutHandler,
+        click: setClickedHandler,
         userName: username,
         password: password,
         favorite: favorite,
+        clicked: clicked,
       }}
     >
       {props.children}
