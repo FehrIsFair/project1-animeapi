@@ -1,10 +1,12 @@
 import React from "react";
-import Anime from "./Anime/Anime";
 import { BrowserRouter, Route } from "react-router-dom";
+
+import Anime from "./Anime/Anime";
 import Login from "./Login/Login";
 import Signup from "./Login/SignUp/SignUp";
 import Navigation from "./Anime/Navigation";
 import Search from "./Anime/Search/Search";
+import Footer from "./Anime/Footer";
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/Anime" exact component={Anime} />
         <Route path="/Search" exact component={Search} />
+        <Footer />
       </div>
     </BrowserRouter>
   );

@@ -9,6 +9,8 @@ div#synopsis img {
 
 #root {
   background-color: #478e74;
+  width: 100%;
+  min-height: 1200px;
 }
 
 .App {
@@ -106,6 +108,8 @@ select {
 .loggedIn {
   background-color: #013924 !important;
   margin-top: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 #login {
@@ -160,4 +164,9 @@ h4.resultTitle {
   float: left;
   margin: 2%;
   border: 1px black solid;
+}
+
+.footer {
+  padding: 2% !important;
+  text-align: center;
 }
