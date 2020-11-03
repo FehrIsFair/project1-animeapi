@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Card, TextField, Button } from "@material-ui/core";
-import { Authentication } from "../Authentication/Authentication";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+import { Authentication } from "../Authentication/Authentication";
+
 const Login = () => {
   const authContext = useContext(Authentication);
-
   const history = useHistory();
 
   return (

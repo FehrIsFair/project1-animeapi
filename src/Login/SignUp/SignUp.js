@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { Authentication } from "../../Authentication/Authentication";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 import { Card, TextField, Button } from "@material-ui/core";
+
+import { Authentication } from "../../Authentication/Authentication";
 
 const SignUp = () => {
   const authContext = useContext(Authentication);
