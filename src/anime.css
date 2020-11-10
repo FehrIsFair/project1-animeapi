@@ -8,7 +8,7 @@ div#synopsis img {
 }
 
 #root {
-  background-color: #478e74;
+  background-color: #71b55f;
   width: 100%;
   min-height: 1200px;
 }
@@ -19,15 +19,15 @@ div#synopsis img {
 }
 
 .loggedOut button {
-  background-color: #377115;
+  background-color: #459032;
 }
 
 .loggedIn button {
-  background-color: #377115;
+  background-color: #459032;
 }
 
 .loggedIn button:hover {
-  background-color: #c5db6d;
+  background-color: #84bc62;
 }
 
 ul li {
@@ -39,7 +39,7 @@ ul a {
 }
 
 .loggedOut button:hover {
-  background-color: #c5db6d;
+  background-color: #84bc62;
 }
 
 h3 {
@@ -84,7 +84,7 @@ h3 {
 }
 
 a {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .nav li {
@@ -106,7 +106,7 @@ select {
 
 .loggedOut,
 .loggedIn {
-  background-color: #013924 !important;
+  background-color: #112e00 !important;
   margin-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
@@ -130,7 +130,12 @@ form div.select {
   margin: 2% !important;
 }
 
+#search {
+  background-color: #459032;
+}
+
 .result {
+  background-color: #84bc62 !important;
 }
 
 .textfield {
@@ -155,9 +160,18 @@ h4.resultTitle {
   display: flex;
 }
 
+.titleScore .MuiLink-root {
+  color: white !important;
+}
+
 .score {
   font-size: 1.4rem;
   margin: 2% !important;
+}
+
+#login,
+#signup {
+  background-color: #4b8f79;
 }
 
 .resultImage {

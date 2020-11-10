@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Card, Typography } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
+
 import GenreList from "./GenreList/GenreList";
 import OtherInfo from "./OtherInfo/OtherInfo";
 import { Authentication } from "../Authentication/Authentication";

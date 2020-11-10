@@ -53,55 +53,57 @@ const Login = () => {
           handleSubmit,
           isSubmitting,
         }) => (
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <TextField
-              autoFocus
-              id="outlined-basic"
-              name="Username"
-              className="textfield"
-              label="UserName"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.Username}
-              required
-              error={Boolean(touched.Username && errors.Username)}
-              helpertext={touched.Username && errors.Username}
-            />
-            <TextField
-              id="outlined-basic"
-              name="Password"
-              className="textfield"
-              label="Password"
-              variant="outlined"
-              value={values.Password}
-              onBlur={handleBlur}
-              error={Boolean(touched.Password && errors.Password)}
-              helpertext={touched.Password && errors.Password}
-              onChange={handleChange}
-              required
-            />
-            <TextField
-              id="outlined-basic"
-              name="Favorite"
-              className="textfield"
-              label="Favorite Anime"
-              variant="outlined"
-              value={values.Favorite}
-              onBlur={handleBlur}
-              error={Boolean(touched.Favorite && errors.Favorite)}
-              helpertext={touched.Favorte && errors.Password}
-              onChange={handleChange}
-            />
-            <Button
-              className="button"
-              variant="contained"
-              disabled={errors.Username || errors.Password}
-              type="Submit"
-            >
-              Sign Up
-            </Button>
-          </form>
+          <Card className="Login Card">
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+              <TextField
+                autoFocus
+                id="outlined-basic"
+                name="Username"
+                className="textfield"
+                label="UserName"
+                variant="outlined"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.Username}
+                required
+                error={Boolean(touched.Username && errors.Username)}
+                helpertext={touched.Username && errors.Username}
+              />
+              <TextField
+                id="outlined-basic"
+                name="Password"
+                className="textfield"
+                label="Password"
+                variant="outlined"
+                value={values.Password}
+                onBlur={handleBlur}
+                error={Boolean(touched.Password && errors.Password)}
+                helpertext={touched.Password && errors.Password}
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                id="outlined-basic"
+                name="Favorite"
+                className="textfield"
+                label="Favorite Anime"
+                variant="outlined"
+                value={values.Favorite}
+                onBlur={handleBlur}
+                error={Boolean(touched.Favorite && errors.Favorite)}
+                helpertext={touched.Favorte && errors.Password}
+                onChange={handleChange}
+              />
+              <Button
+                className="button"
+                variant="contained"
+                disabled={errors.Username || errors.Password}
+                type="Submit"
+              >
+                Sign Up
+              </Button>
+            </form>
+          </Card>
         )}
       </Formik>
     </Card>

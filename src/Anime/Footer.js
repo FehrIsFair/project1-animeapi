@@ -4,7 +4,9 @@ import { Card, Typography } from "@material-ui/core";
 const Footer = () => {
   return (
     <Card className="footer">
-      <Typography variant="p">This is the footer.</Typography>
+      <Typography variant="p">
+        This site was made for educational purposes only.
+      </Typography>
     </Card>
   );
 };
