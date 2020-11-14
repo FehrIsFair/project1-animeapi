@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Card, Typography } from "@material-ui/core";
+import { Button, Card, Typography } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 
 import GenreList from "./GenreList/GenreList";
@@ -16,6 +16,10 @@ import { Authentication } from "../Authentication/Authentication";
 const Anime = () => {
   const [anime, setAnime] = useState();
   const authContext = useContext(Authentication);
+
+  const addFavorite = () => {
+    authContext.addFavorite(anime);
+  };
 
   useEffect(() => {
     const jikanApi = axios.create({
@@ -46,6 +50,9 @@ const Anime = () => {
         <Typography>
           <span className="bold">Rating:</span> {anime?.score}/10
         </Typography>
+        <Button variant="contained" onClick={() => addFavorite(anime)}>
+          Add to Favorites
+        </Button>
       </Card>
       <Card id="synopsis">
         <img

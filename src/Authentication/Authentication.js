@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import axios from "axios";
 
 export const Authentication = createContext({
   isAuth: false,
@@ -6,6 +7,7 @@ export const Authentication = createContext({
   password: "",
   favorite: "",
   clickedAnime: "",
+  favoriteList: {},
   login: () => {},
   logout: () => {},
 });
@@ -16,6 +18,10 @@ const AuthProvider = (props) => {
   const [password, setPassword] = useState();
   const [favorite, setFavorite] = useState();
   const [clicked, setClicked] = useState();
+  const [list, setList] = useState();
+  const jikanApi = axios.create({
+    baseURL: "https://api.jikan.moe/v3/",
+  });
 
   const loginHandler = (_username, _password, _favorite) => {
     setIsAuthenticated(true);
@@ -29,6 +35,15 @@ const AuthProvider = (props) => {
     setPassword("");
     setFavorite("");
     setClicked("");
+    setList({});
+  };
+  const favoriteListBuilder = async (click) => {
+    const { data } = await jikanApi.get(`anime/${click}`);
+    if (list === null) {
+      setList(data);
+    } else {
+      setList([...list, data]);
+    }
   };
   const setClickedHandler = (click) => {
     setClicked(click);
@@ -40,10 +55,12 @@ const AuthProvider = (props) => {
         isAuth: isAuthenticated,
         logout: logoutHandler,
         click: setClickedHandler,
+        addFavorite: favoriteListBuilder,
         userName: username,
         password: password,
         favorite: favorite,
         clicked: clicked,
+        favoriteList: list,
       }}
     >
       {props.children}

@@ -41,6 +41,11 @@ const Navigation = () => {
               <Button>Search</Button>
             </Link>
           </li>
+          <li>
+            <Link to="/Favorites">
+              <Button>Favorites</Button>
+            </Link>
+          </li>
         </ul>
       </Card>
     );

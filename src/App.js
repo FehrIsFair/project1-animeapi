@@ -6,6 +6,7 @@ import Login from "./Login/Login";
 import Signup from "./Login/SignUp/SignUp";
 import NavBar from "./Anime/Navigation";
 import Search from "./Anime/Search/Search";
+import FavoriteList from "./Anime/FavoriteList/FavoriteList";
 import Footer from "./Anime/Footer";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/Anime" exact component={Anime} />
         <Route path="/Search" exact component={Search} />
+        <Route path="/Favorites" exact component={FavoriteList} />
         <Footer />
       </div>
     </BrowserRouter>
