@@ -1,3 +1,21 @@
+.favSyn {
+  display: flex;
+}
+
+.favorite h4 {
+  padding: 2%;
+}
+
+.favSyn img {
+  margin-top: 5%;
+  margin-left: 2%;
+  border: 2px black solid;
+}
+
+.favSyn p {
+  padding: 3%;
+}
+
 ul#genreList,
 div#synopsis {
   display: flex;
