@@ -1,14 +1,17 @@
-import React, { useState, useContext } from "react";
-import { Card, Typography } from "@material-ui/core";
+import React, { useState, useContext, useEffect } from "react";
+import { Card, Typography, Button } from "@material-ui/core";
 
 import { Authentication } from "../../Authentication/Authentication";
-import data from "../../data/FMAB.json";
-
-const FMAB = data;
 
 const FavoriteList = () => {
   const AuthContext = useContext(Authentication);
-  const [fullList, setFullList] = useState([FMAB]);
+  const [fullList, setFullList] = useState(AuthContext.favoriteList);
+
+  const listChangeTracker = (mal_id) => {
+    AuthContext.removeFavorite(mal_id);
+  };
+
+  useEffect(() => {}, [fullList]);
 
   return (
     <Card>
@@ -19,6 +22,9 @@ const FavoriteList = () => {
             <Typography variant="h4">{item.title}</Typography>
             <Card className="favScore">
               <Typography variant="h5">{item.score}</Typography>
+              <Button onClick={() => listChangeTracker(item.mal_id)}>
+                Remove
+              </Button>
             </Card>
             <div className="favSyn">
               <img

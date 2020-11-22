@@ -50,9 +50,13 @@ const Anime = () => {
         <Typography>
           <span className="bold">Rating:</span> {anime?.score}/10
         </Typography>
-        <Button variant="contained" onClick={() => addFavorite(anime)}>
-          Add to Favorites
-        </Button>
+        {authContext.searchList(anime?.mal_id) ? (
+          <Button variant="disabled">Added</Button>
+        ) : (
+          <Button variant="contained" onClick={() => addFavorite(anime)}>
+            +
+          </Button>
+        )}
       </Card>
       <Card id="synopsis">
         <img
