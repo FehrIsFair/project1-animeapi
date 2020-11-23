@@ -54,7 +54,6 @@ const AuthProvider = (props) => {
     return foundItem;
   };
   const favoriteListHandler = (mal_id) => {
-    debugger;
     let newList = [];
     for (let value of list) {
       if (value.mal_id !== mal_id) {

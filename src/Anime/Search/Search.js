@@ -8,16 +8,20 @@ import * as Yup from "yup";
 
 const Synopsis = (props) => {
   const [showAll, setShowAll] = useState(false);
-  useEffect(() => {}, [setShowAll]);
-  const showMore = () => {
-    setShowAll(true);
-  };
-  const showLess = () => {
-    setShowAll(false);
-  };
   const limit = 300;
   const content = props.result.synopsis;
   const toShow = content.substring(0, limit) + "...";
+
+  const showMore = () => {
+    setShowAll(true);
+  };
+
+  const showLess = () => {
+    setShowAll(false);
+  };
+
+  useEffect(() => {}, [setShowAll]);
+
   if (content.length <= limit) {
     return (
       <Card id="synText">
@@ -26,6 +30,7 @@ const Synopsis = (props) => {
       </Card>
     );
   }
+
   if (showAll) {
     return (
       <Card id="synText">
@@ -35,6 +40,7 @@ const Synopsis = (props) => {
       </Card>
     );
   }
+
   return (
     <Card id="synText">
       <Typography>Synopsis:</Typography>
@@ -48,22 +54,27 @@ const Search = () => {
   const authContext = useContext(Authentication);
   const [searchResults, setSearchResults] = useState();
   const history = useHistory();
+
   const redirectToAnimePage = (malID) => {
     authContext.click(malID);
     history.push("/Anime");
   };
+
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
+
   async function getResults(newCall) {
     const { data } = await jikanApi.get(
       `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0`
     );
     setSearchResults(data.results);
   }
+
   const replaceSpaces = (query) => {
     return query.replace(" ", "20%");
   };
+
   useEffect(() => {
     const jikanApi = axios.create({
       baseURL: "https://api.jikan.moe/v3/",
@@ -82,12 +93,15 @@ const Search = () => {
     };
     setFirstSearch(authContext.favorite);
   }, [setSearchResults, authContext.favorite]);
+
   if (!authContext.isAuth) {
     return <Redirect to="/" />;
   }
+
   if (searchResults === null) {
     return <div>Loading...</div>;
   }
+
   return (
     <Card id="search">
       <Card id="searchFunction">

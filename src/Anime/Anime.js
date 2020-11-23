@@ -33,12 +33,12 @@ const Anime = () => {
     getAnime(authContext.clicked);
   }, [setAnime, authContext.clicked]);
 
-  if (!anime) {
-    return <div>Loading...</div>;
-  }
-
   if (!authContext.isAuth) {
     return <Redirect to="/" />;
+  }
+
+  if (!anime) {
+    return <div>Loading...</div>;
   }
 
   return (

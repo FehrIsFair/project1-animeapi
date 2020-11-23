@@ -1,17 +1,46 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Card, Typography, Button } from "@material-ui/core";
+import { Card, Typography, Button, Link } from "@material-ui/core";
+import { Redirect, useHistory } from "react-router-dom";
 
 import { Authentication } from "../../Authentication/Authentication";
 
 const FavoriteList = () => {
   const AuthContext = useContext(Authentication);
-  const [fullList, setFullList] = useState(AuthContext.favoriteList);
+  const [fullList, setFullList] = useState();
+  const [listChange, setListChange] = useState(true);
+  const history = useHistory();
 
   const listChangeTracker = (mal_id) => {
     AuthContext.removeFavorite(mal_id);
+    setListChange(true);
   };
 
-  useEffect(() => {}, [fullList]);
+  const redirectToAnimePage = (malID) => {
+    AuthContext.click(malID);
+    history.push("/Anime");
+  };
+
+  useEffect(() => {
+    const setListRender = async () => {
+      if (listChange) {
+        await setFullList(AuthContext.favoriteList);
+        setListChange(false);
+      }
+    };
+    setListRender();
+  }, [listChange, AuthContext.favoriteList]);
+
+  if (!AuthContext.isAuth) {
+    return <Redirect to="/" />;
+  }
+
+  if (!fullList) {
+    return (
+      <Card>
+        <Typography>You don't have any favorites saved.</Typography>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -19,7 +48,9 @@ const FavoriteList = () => {
       {fullList.map((item) => {
         return (
           <Card className="favorite">
-            <Typography variant="h4">{item.title}</Typography>
+            <Link onClick={() => redirectToAnimePage(item.mal_id)}>
+              <Typography variant="h4">{item.title}</Typography>
+            </Link>
             <Card className="favScore">
               <Typography variant="h5">{item.score}</Typography>
               <Button onClick={() => listChangeTracker(item.mal_id)}>
