@@ -3,16 +3,19 @@ import { Card, TextField, Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import firebase from "firebase";
 
 import { Authentication } from "../Authentication/Authentication";
 
 const Login = () => {
   const authContext = useContext(Authentication);
   const history = useHistory();
+  const firebaseApp = firebase.apps[0];
 
   return (
     <Card id="login">
       <h4>Login</h4>
+      {/*<p>{JSON.stringify(firebaseApp.options, null, 2)}</p>*/}
       <Formik
         initialValues={{
           Username: "",

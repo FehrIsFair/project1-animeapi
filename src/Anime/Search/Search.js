@@ -106,7 +106,7 @@ const Search = () => {
     return <Redirect to="/" />;
   }
 
-  if (searchResults === null) {
+  if (!searchResults) {
     return <div>Loading...</div>;
   }
 
