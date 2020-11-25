@@ -9003,7 +9003,7 @@ react-sticky-nav@^4.0.6:
   resolved "https://registry.yarnpkg.com/react-sticky-nav/-/react-sticky-nav-4.0.6.tgz#3d0613388e4f9a00a783e308f3d0f17fa08a3cde"
   integrity sha512-1HWHPUQR5/dSqPSF/4aIzirqU2tEtXtMY1DM1IL0UbqwZY2883Qon2s0/tYiAzU7gbAlI+Acbp5hRbp5KgJNkg==
 
-react-transition-group@^4.4.0:
+react-transition-group@^4.4.0, react-transition-group@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.1.tgz#63868f9325a38ea5ee9535d828327f85773345c9"
   integrity sha512-Djqr7OQ2aPUiYurhPalTrVy9ddmFCCzwhqQmtN+J3+3DzLO209Fdr70QrN8Z3DsglWql6iY1lDWAfpFiBtuKGw==

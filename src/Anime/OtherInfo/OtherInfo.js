@@ -10,7 +10,7 @@ const OtherInfo = (props) => {
         <Card id="other-titles">
           <Typography variant="h4">Other Titles:</Typography>
           <List className="liststyle">
-            {aliases.map((aliases, index) => {
+            {props.anime.title_synonyms.map((index) => {
               return <ListItem>{props.anime.title_synonyms[index]}</ListItem>;
             })}
           </List>

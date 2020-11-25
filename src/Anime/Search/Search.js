@@ -2,9 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import { Card, Button, TextField, Typography, Link } from "@material-ui/core";
 import axios from "axios";
 import { Redirect, useHistory } from "react-router-dom";
-import { Authentication } from "../../Authentication/Authentication";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import Transition from "react-transition-group/Transition";
+
+import { Authentication } from "../../Authentication/Authentication";
 
 const Synopsis = (props) => {
   const [showAll, setShowAll] = useState(false);
@@ -48,6 +50,12 @@ const Synopsis = (props) => {
       <Button onClick={showMore}>Read Less</Button>
     </Card>
   );
+};
+
+const style = {
+  fadeIn: {
+    opacity: 1.0,
+  },
 };
 
 const Search = () => {
@@ -154,24 +162,26 @@ const Search = () => {
         </Formik>
       </Card>
       {searchResults?.map((result) => (
-        <Card className="result">
-          <img
-            className="resultImage"
-            src={result?.image_url}
-            alt={`${result?.title} Promotional Art`}
-          />
-          <div classNames="titleScore">
-            <Typography className="resultTitle" variant="h4">
-              <Link onClick={() => redirectToAnimePage(result?.mal_id)}>
-                {result?.title}
-              </Link>
-            </Typography>
-            <Typography variant="p" className="score">
-              Score: {result?.score}
-            </Typography>
-          </div>
-          <Synopsis result={result} />
-        </Card>
+        <Transition in={searchResults ? true : false}>
+          <Card className="result">
+            <img
+              className="resultImage"
+              src={result?.image_url}
+              alt={`${result?.title} Promotional Art`}
+            />
+            <div classNames="titleScore">
+              <Typography className="resultTitle" variant="h4">
+                <Link onClick={() => redirectToAnimePage(result?.mal_id)}>
+                  {result?.title}
+                </Link>
+              </Typography>
+              <Typography variant="p" className="score">
+                Score: {result?.score}
+              </Typography>
+            </div>
+            <Synopsis result={result} />
+          </Card>
+        </Transition>
       ))}
     </Card>
   );
