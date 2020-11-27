@@ -16,6 +16,16 @@
   padding: 3%;
 }
 
+.favScore {
+  display: flex;
+  flex-direction: row;
+  padding: 1.3rem;
+}
+
+.favScore h5 {
+  margin-right: 0.8rem;
+}
+
 ul#genreList,
 div#synopsis {
   display: flex;
@@ -201,8 +211,4 @@ h4.resultTitle {
 .footer {
   padding: 2% !important;
   text-align: center;
-}
-
-.searchFadeIn {
-  transition: fadeIn ease 10s;
 }

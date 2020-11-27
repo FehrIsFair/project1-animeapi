@@ -52,15 +52,25 @@ const Synopsis = (props) => {
   );
 };
 
-const style = {
-  fadeIn: {
-    opacity: 1.0,
+const transitionStyles = {
+  entering: {
+    opacity: 0.5,
+  },
+  entered: {
+    opacity: 1,
+  },
+  exiting: {
+    opacity: 0.5,
+  },
+  exited: {
+    opacity: 0,
   },
 };
 
 const Search = () => {
   const authContext = useContext(Authentication);
   const [searchResults, setSearchResults] = useState();
+  const [newSearch, setNewSearch] = useState(true);
   const history = useHistory();
 
   const redirectToAnimePage = (malID) => {
@@ -73,15 +83,13 @@ const Search = () => {
   });
 
   async function getResults(newCall) {
+    setNewSearch(false);
     const { data } = await jikanApi.get(
       `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0`
     );
+    setNewSearch(true);
     setSearchResults(data.results);
   }
-
-  const replaceSpaces = (query) => {
-    return query.replace(" ", "20%");
-  };
 
   useEffect(() => {
     const jikanApi = axios.create({
@@ -122,7 +130,7 @@ const Search = () => {
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              await getResults(replaceSpaces(values.searchTerm));
+              await getResults(values.searchTerm);
             } catch (err) {
               console.error(err);
             }
@@ -162,25 +170,50 @@ const Search = () => {
         </Formik>
       </Card>
       {searchResults?.map((result) => (
-        <Transition in={searchResults ? true : false}>
-          <Card className="result">
-            <img
-              className="resultImage"
-              src={result?.image_url}
-              alt={`${result?.title} Promotional Art`}
-            />
-            <div classNames="titleScore">
-              <Typography className="resultTitle" variant="h4">
-                <Link onClick={() => redirectToAnimePage(result?.mal_id)}>
-                  {result?.title}
-                </Link>
-              </Typography>
-              <Typography variant="p" className="score">
-                Score: {result?.score}
-              </Typography>
-            </div>
-            <Synopsis result={result} />
-          </Card>
+        <Transition in={newSearch} timeout={1000} mountOnEnter unmountOnExit>
+          {(state) => (
+            <Card
+              className="result"
+              style={
+                ({
+                  transition: "opacity 1s ease-out",
+                },
+                transitionStyles[state])
+              }
+            >
+              <img
+                className="resultImage"
+                src={result?.image_url}
+                alt={`${result?.title} Promotional Art`}
+              />
+              <div classNames="titleScore">
+                <Typography className="resultTitle" variant="h4">
+                  <Link onClick={() => redirectToAnimePage(result?.mal_id)}>
+                    {result?.title}
+                  </Link>
+                </Typography>
+                {authContext.searchList(result?.mal_id) ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => authContext.removeFavorite(result?.mal_id)}
+                  >
+                    Remove
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => authContext.addFavorite(result, true)}
+                  >
+                    Add
+                  </Button>
+                )}
+                <Typography variant="p" className="score">
+                  Score: {result?.score}
+                </Typography>
+              </div>
+              <Synopsis result={result} />
+            </Card>
+          )}
         </Transition>
       ))}
     </Card>

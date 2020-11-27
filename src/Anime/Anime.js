@@ -51,10 +51,15 @@ const Anime = () => {
           <span className="bold">Rating:</span> {anime?.score}/10
         </Typography>
         {authContext.searchList(anime?.mal_id) ? (
-          <Button variant="disabled">Added</Button>
+          <Button
+            variant="contained"
+            onClick={() => authContext.removeFavorite(anime?.mal_id)}
+          >
+            Remove
+          </Button>
         ) : (
-          <Button variant="contained" onClick={() => addFavorite(anime)}>
-            +
+          <Button variant="contained" onClick={() => addFavorite(anime, false)}>
+            Add
           </Button>
         )}
       </Card>
@@ -74,7 +79,11 @@ const Anime = () => {
       </Card>
 
       <GenreList genres={anime?.genres} />
-      <OtherInfo anime={anime} />
+      <OtherInfo
+        title_synonyms={anime?.title_synonyms}
+        genres={anime?.genres}
+        related={anime?.related}
+      />
     </Card>
   );
 };

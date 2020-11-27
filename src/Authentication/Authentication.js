@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import axios from "axios";
 
 // This is the context of the entire application.
 // It is what allows all views to be able to load what it needs to load.
@@ -27,6 +28,10 @@ const AuthProvider = (props) => {
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
 
+  const jikanApi = axios.create({
+    baseURL: "https://api.jikan.moe/v3/",
+  });
+
   const loginHandler = (_username, _password, _favorite) => {
     setIsAuthenticated(true);
     setUsername(_username);
@@ -41,7 +46,11 @@ const AuthProvider = (props) => {
     setClicked("");
     setList([]);
   };
-  const favoriteListBuilder = async (anime) => {
+  const favoriteListBuilder = async (anime, searchResult) => {
+    if (searchResult) {
+      const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
+      anime = data;
+    }
     setList([...list, anime]);
   };
   const favoriteListSearcher = (mal_id) => {
