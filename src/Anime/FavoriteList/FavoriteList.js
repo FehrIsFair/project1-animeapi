@@ -49,7 +49,7 @@ const FavoriteList = () => {
     setListRender();
   }, [listChange, AuthContext.favoriteList]);
 
-  if (!AuthContext.isAuth) {
+  if (!AuthContext.isAuthenticated) {
     return <Redirect to="/" />;
   }
 

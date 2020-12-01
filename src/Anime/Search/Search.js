@@ -110,7 +110,7 @@ const Search = () => {
     setFirstSearch(authContext.favorite);
   }, [setSearchResults, authContext.favorite]);
 
-  if (!authContext.isAuth) {
+  if (!authContext.isAuthenticated) {
     return <Redirect to="/" />;
   }
 

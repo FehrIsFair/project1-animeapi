@@ -10,7 +10,7 @@ const Navigation = () => {
 
   useEffect(() => {}, [authContext.logout]);
 
-  if (authContext.isAuth === false)
+  if (authContext.isAuthenticated === false)
     return (
       <Card className="loggedOut">
         <ul className="nav">
@@ -27,7 +27,7 @@ const Navigation = () => {
         </ul>
       </Card>
     );
-  if (authContext.isAuth === true)
+  if (authContext.isAuthenticated === true)
     return (
       <Card className="loggedIn">
         <ul className="nav">
