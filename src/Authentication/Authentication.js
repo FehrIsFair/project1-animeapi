@@ -62,6 +62,9 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
+  const favoriteHandler = (_favorite) => {
+    setFavorite(_favorite);
+  };
   const signInWithEmailAndPassword = async (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   };
@@ -144,6 +147,7 @@ const AuthProvider = ({ children }) => {
         removeFavorite: favoriteListHandler,
         searchList: favoriteListSearcher,
         signInWithGoogle,
+        favoriteHandler: favoriteHandler,
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,

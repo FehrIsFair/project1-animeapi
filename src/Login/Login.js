@@ -43,6 +43,7 @@ const Login = () => {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             await signInWithEmailAndPassword(values.Email, values.Password);
+            authContext.favoriteHanlder(values.Favorite);
             history.push("/Search");
             console.log(values.Email, values.Password);
           } catch (err) {
