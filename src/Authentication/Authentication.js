@@ -53,6 +53,7 @@ export const Authentication = createContext({
 const AuthProvider = ({ children }) => {
   //const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
+  const [favorite, setFavorite] = useState();
 
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
@@ -61,16 +62,13 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
+  const signInWithEmailAndPassword = async (email, password) => {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  };
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     return firebase.auth().signInWithPopup(provider);
-  };
-
-  const loginHandler = (_username, _password, _favorite) => {
-    setUsername(_username);
-    setPassword(_password);
-    setFavorite(_favorite);
   };
   const logoutHandler = () => {
     return firebase.auth().signOut();
@@ -137,13 +135,15 @@ const AuthProvider = ({ children }) => {
   return (
     <Authentication.Provider
       value={{
-        login: loginHandler,
-        isAuthenticated: isAuthenticated,
+        ...state,
+        method: "FirebaseAuth",
         logout: logoutHandler,
+        signInWithEmailAndPassword,
         click: setClickedHandler,
         addFavorite: favoriteListBuilder,
         removeFavorite: favoriteListHandler,
         searchList: favoriteListSearcher,
+        signInWithGoogle,
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,

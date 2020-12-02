@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Card, Button } from "@material-ui/core";
+import { Card, Button, Avatar } from "@material-ui/core";
 
 import FailedRender from "../Errors/FailedRender/FailedRender";
 import { Authentication } from "../Authentication/Authentication";
@@ -47,6 +47,7 @@ const Navigation = () => {
             </Link>
           </li>
         </ul>
+        <Avatar src={authContext.user.photoURL} />
       </Card>
     );
   return <FailedRender />;

@@ -3,19 +3,26 @@ import { Card, TextField, Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import firebase from "firebase";
 
 import { Authentication } from "../Authentication/Authentication";
 
 const Login = () => {
   const authContext = useContext(Authentication);
   const history = useHistory();
-  const firebaseApp = firebase.apps[0];
+  const { signInWithGoogle, signInWithEmailAndPassword } = authContext;
+
+  const handleGoogleClick = async () => {
+    try {
+      await signInWithGoogle();
+      history.push("/Search");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Card id="login">
       <h4>Login</h4>
-      {/*<p>{JSON.stringify(firebaseApp.options, null, 2)}</p>*/}
       <Formik
         initialValues={{
           Username: "",
@@ -23,7 +30,7 @@ const Login = () => {
           Submit: null,
         }}
         validationSchema={Yup.object().shape({
-          Username: Yup.string()
+          Email: Yup.string()
             .min(10, "Too short")
             .max(50, "Too long")
             .required("Must enter an email"),
@@ -35,15 +42,14 @@ const Login = () => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await authContext.login(
-              values.Username,
-              values.Password,
-              values.Favorite
-            );
+            await signInWithEmailAndPassword(values.Email, values.Password);
             history.push("/Search");
-            console.log(values.Username, values.Password);
+            console.log(values.Email, values.Password);
           } catch (err) {
             console.error(err);
+            setStatus({ success: false });
+            setErrors({ submit: err.message });
+            setSubmitting(false);
           }
         }}
       >
@@ -61,16 +67,16 @@ const Login = () => {
               <TextField
                 autoFocus
                 id="outlined-basic"
-                name="Username"
+                name="Email"
                 className="textfield"
-                label="UserName"
+                label="email"
                 variant="outlined"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.Username}
+                value={values.Email}
                 required
-                error={Boolean(touched.Username && errors.Username)}
-                helpertext={touched.Username && errors.Username}
+                error={Boolean(touched.Email && errors.Email)}
+                helpertext={touched.Email && errors.Email}
               />
               <TextField
                 id="outlined-basic"
@@ -109,6 +115,14 @@ const Login = () => {
           </Card>
         )}
       </Formik>
+      <Button
+        fullWidth
+        onClick={handleGoogleClick}
+        size="large"
+        variant="contained"
+      >
+        Sign in With Google
+      </Button>
     </Card>
   );
 };
