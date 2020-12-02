@@ -30,6 +30,7 @@ const Navigation = () => {
   if (authContext.isAuthenticated === true)
     return (
       <Card className="loggedIn">
+        <Avatar className="avatar" src={authContext.user.photoURL} />
         <ul className="nav">
           <li>
             <Link to="/">
@@ -47,7 +48,6 @@ const Navigation = () => {
             </Link>
           </li>
         </ul>
-        <Avatar src={authContext.user.photoURL} />
       </Card>
     );
   return <FailedRender />;

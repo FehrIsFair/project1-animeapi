@@ -212,3 +212,9 @@ h4.resultTitle {
   padding: 2% !important;
   text-align: center;
 }
+
+.avatar {
+  float: right;
+  margin: 2%;
+  margin-top: 1.5%;
+}

@@ -55,6 +55,7 @@ const AuthProvider = ({ children }) => {
   //const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const [favorite, setFavorite] = useState();
+  const [objectList, setObjectList] = useState();
 
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
@@ -63,6 +64,13 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
+  const convertFavoriteListToObject = () => {
+    if (list) {
+      for (let value of list) {
+        setObjectList({ ...objectList, value });
+      }
+    }
+  };
   const favoriteHandler = (_favorite) => {
     setFavorite(_favorite);
   };
@@ -85,11 +93,11 @@ const AuthProvider = ({ children }) => {
       const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
       anime = data;
     }
-    setList({ ...list, anime });
+    setList([...list, anime]);
   };
   const favoriteListSearcher = (mal_id) => {
     let foundItem = false;
-    for (let value in list) {
+    for (let value of list) {
       if (value.mal_id === mal_id) {
         foundItem = true;
       }
@@ -97,10 +105,10 @@ const AuthProvider = ({ children }) => {
     return foundItem;
   };
   const favoriteListHandler = (mal_id) => {
-    let newList = {};
-    for (let value in list) {
+    let newList = [];
+    for (let value of list) {
       if (value.mal_id !== mal_id) {
-        newList.push(value);
+        newList = [...newList, value];
       }
     }
     setList(newList);
