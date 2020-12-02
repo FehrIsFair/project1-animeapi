@@ -25,7 +25,7 @@ const Login = () => {
       <h4>Login</h4>
       <Formik
         initialValues={{
-          Username: "",
+          Email: "",
           Password: "",
           Submit: null,
         }}

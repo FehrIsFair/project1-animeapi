@@ -9,6 +9,16 @@ import { Authentication } from "../../Authentication/Authentication";
 const SignUp = () => {
   const authContext = useContext(Authentication);
   const history = useHistory();
+  const { createUserWithEmailAndPassword, signInWithGoogle } = authContext;
+
+  const handleGoogleClick = async () => {
+    try {
+      await signInWithGoogle();
+      history.push("/Search");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Card id="login">
@@ -16,12 +26,12 @@ const SignUp = () => {
       <Card>
         <Formik
           initialValues={{
-            Username: "",
+            Email: "",
             Password: "",
             Submit: null,
           }}
           validationSchema={Yup.object().shape({
-            Username: Yup.string()
+            Email: Yup.string()
               .min(10, "Too short")
               .max(50, "Too long")
               .required("Must enter an email"),
@@ -33,13 +43,13 @@ const SignUp = () => {
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              await authContext.login(
-                values.Username,
-                values.Password,
-                values.Favorite
+              await createUserWithEmailAndPassword(
+                values.Email,
+                values.Password
               );
+              authContext.favorteHandler(values.Favorite);
               history.push("/Search");
-              console.log(values.Username, values.Password);
+              console.log(values.Email, values.Email);
             } catch (err) {
               console.error(err);
             }
@@ -58,16 +68,16 @@ const SignUp = () => {
               <TextField
                 autoFocus
                 id="outlined-basic"
-                name="Username"
+                name="Email"
                 className="textfield"
-                label="UserName"
+                label="Email"
                 variant="outlined"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.Username}
+                value={values.Email}
                 required
-                error={Boolean(touched.Username && errors.Username)}
-                helpertext={touched.Username && errors.Username}
+                error={Boolean(touched.Email && errors.Email)}
+                helpertext={touched.Email && errors.Email}
               />
               <TextField
                 id="outlined-basic"
@@ -106,6 +116,14 @@ const SignUp = () => {
           )}
         </Formik>
       </Card>
+      <Button
+        fullWidth
+        onClick={handleGoogleClick}
+        size="large"
+        variant="contained"
+      >
+        Sign in With Google
+      </Button>
     </Card>
   );
 };

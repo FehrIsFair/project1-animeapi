@@ -10,6 +10,7 @@ const initialAuthState = {
   clickedAnime: "",
   login: () => {},
   logout: () => {},
+  signup: () => {},
   click: () => {},
   searchList: () => {},
   addFavorite: () => {},
@@ -67,6 +68,9 @@ const AuthProvider = ({ children }) => {
   };
   const signInWithEmailAndPassword = async (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password);
+  };
+  const createUserWithEmailAndPassword = async (email, password) => {
+    return firebase.auth().createUserWithEmailAndPassword(email, password);
   };
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -147,6 +151,7 @@ const AuthProvider = ({ children }) => {
         removeFavorite: favoriteListHandler,
         searchList: favoriteListSearcher,
         signInWithGoogle,
+        createUserWithEmailAndPassword,
         favoriteHandler: favoriteHandler,
         favorite: favorite,
         clicked: clicked,
