@@ -2,6 +2,7 @@ import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
 import firebase from "../lib/firebase";
 
+// This is just the initial state of the authentication.
 const initialAuthState = {
   isAuthenticated: false,
   isInitialized: false,
@@ -17,6 +18,7 @@ const initialAuthState = {
   removeFavorite: () => {},
 };
 
+// This reducer returns the state an objecgt based on if the user successfully authenticated.
 const reducer = (state, action) => {
   switch (action.type) {
     case "AUTH_STATE_CHANGED": {
@@ -51,21 +53,24 @@ export const Authentication = createContext({
   favoriteList: [],
 });
 
+// This is the Provider and lets the rest of the compoments access things globally without needing to pass a prop everywhere.
 const AuthProvider = ({ children }) => {
-  //const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Here are my hooks that trigger states and keep track of things accross the app.
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const [favorite, setFavorite] = useState();
-
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
 
+  // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
 
+  // This handles the now depricated
   const favoriteHandler = (_favorite) => {
     setFavorite(_favorite);
   };
+  // This group handles the sign up and login functinality. Email/Password, Google Account, and hanldes crateing an account with an email and password.
   const signInWithEmailAndPassword = async (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   };
@@ -77,9 +82,11 @@ const AuthProvider = ({ children }) => {
 
     return firebase.auth().signInWithPopup(provider);
   };
+  // Just the logout function
   const logoutHandler = () => {
     return firebase.auth().signOut();
   };
+  // This build the favorite list.
   const favoriteListBuilder = async (anime, searchResult) => {
     if (searchResult) {
       const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
@@ -87,6 +94,7 @@ const AuthProvider = ({ children }) => {
     }
     setList([...list, anime]);
   };
+  // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
     let foundItem = false;
     for (let value of list) {
@@ -96,6 +104,7 @@ const AuthProvider = ({ children }) => {
     }
     return foundItem;
   };
+  // This removes an anime from the list by looking for the anime of the same ID
   const favoriteListHandler = (mal_id) => {
     let newList = [];
     for (let value of list) {
@@ -105,10 +114,12 @@ const AuthProvider = ({ children }) => {
     }
     setList(newList);
   };
+  // This makes sure that the clicked anime is remembered after going towards the anime page.
   const setClickedHandler = (click) => {
     setClicked(click);
   };
 
+  // This is juse the logic used to make sure the user is authenticated between sessions and if they logout correctly sets the state so that isAuthenticated returns false.
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {

@@ -14,13 +14,16 @@ import { Authentication } from "../Authentication/Authentication";
       array, making it hard to even itterate through. */
 
 const Anime = () => {
+  // Hooks needed in order for the view to function.
   const [anime, setAnime] = useState();
   const authContext = useContext(Authentication);
 
+  // adds a favorite to the favorite list
   const addFavorite = () => {
     authContext.addFavorite(anime);
   };
 
+  // Logic for setting up the view for the view
   useEffect(() => {
     const jikanApi = axios.create({
       baseURL: "https://api.jikan.moe/v3/",
@@ -33,10 +36,12 @@ const Anime = () => {
     getAnime(authContext.clicked);
   }, [setAnime, authContext.clicked]);
 
+  // Route Gaurding
   if (!authContext.isAuthenticated) {
     return <Redirect to="/" />;
   }
 
+  // Ensuring the view is populated while the anime is being called on.
   if (!anime) {
     return <div>Loading...</div>;
   }
@@ -50,18 +55,24 @@ const Anime = () => {
         <Typography>
           <span className="bold">Rating:</span> {anime?.score}/10
         </Typography>
-        {authContext.searchList(anime?.mal_id) ? (
-          <Button
-            variant="contained"
-            onClick={() => authContext.removeFavorite(anime?.mal_id)}
-          >
-            Remove
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={() => addFavorite(anime, false)}>
-            Add
-          </Button>
-        )}
+        {
+          // conditional rednering for the add/remove button of the favorite list.
+          authContext.searchList(anime?.mal_id) ? (
+            <Button
+              variant="contained"
+              onClick={() => authContext.removeFavorite(anime?.mal_id)}
+            >
+              Remove
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => addFavorite(anime, false)}
+            >
+              Add
+            </Button>
+          )
+        }
       </Card>
       <Card id="synopsis">
         <img
@@ -78,6 +89,9 @@ const Anime = () => {
         </Card>
       </Card>
 
+      {/* These components are mainly static and don't have any special function
+          They only take the props given and map them out. In some cases only if they have something to map out.
+    */}
       <GenreList genres={anime?.genres} />
       <OtherInfo
         title_synonyms={anime?.title_synonyms}

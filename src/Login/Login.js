@@ -7,10 +7,13 @@ import * as Yup from "yup";
 import { Authentication } from "../Authentication/Authentication";
 
 const Login = () => {
+  // All of the hooks needed to make the component work
   const authContext = useContext(Authentication);
   const history = useHistory();
+  // This separates the sign in functions form the context.
   const { signInWithGoogle, signInWithEmailAndPassword } = authContext;
 
+  // This hanldes the google login by wrapping it in an asynchronous function.
   const handleGoogleClick = async () => {
     try {
       await signInWithGoogle();
@@ -23,6 +26,7 @@ const Login = () => {
   return (
     <Card id="login">
       <h4>Login</h4>
+      {/* Using Formik, we set the expected values, then steup the logic and validation. After that its a pretty simple form */}
       <Formik
         initialValues={{
           Email: "",
@@ -116,6 +120,7 @@ const Login = () => {
           </Card>
         )}
       </Formik>
+      {/* This is the button that logs in with google. */}
       <Button
         fullWidth
         onClick={handleGoogleClick}

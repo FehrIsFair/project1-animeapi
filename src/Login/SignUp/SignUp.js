@@ -7,10 +7,13 @@ import { Card, TextField, Button } from "@material-ui/core";
 import { Authentication } from "../../Authentication/Authentication";
 
 const SignUp = () => {
+  // All of the hooks needed to make the component work
   const authContext = useContext(Authentication);
   const history = useHistory();
+  // This separates the sign in functions form the context.
   const { createUserWithEmailAndPassword, signInWithGoogle } = authContext;
 
+  // This hanldes the google login by wrapping it in an asynchronous function.
   const handleGoogleClick = async () => {
     try {
       await signInWithGoogle();
@@ -24,6 +27,7 @@ const SignUp = () => {
     <Card id="login">
       <h4>Sign Up</h4>
       <Card>
+        {/* Using Formik, we set the expected values, then steup the logic and validation. After that its a pretty simple form */}
         <Formik
           initialValues={{
             Email: "",
@@ -116,6 +120,7 @@ const SignUp = () => {
           )}
         </Formik>
       </Card>
+      {/* This is the button that logs in with google. */}
       <Button
         fullWidth
         onClick={handleGoogleClick}

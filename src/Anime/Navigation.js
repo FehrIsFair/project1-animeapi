@@ -2,10 +2,11 @@ import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Avatar } from "@material-ui/core";
 
-import FailedRender from "../Errors/FailedRender/FailedRender";
 import { Authentication } from "../Authentication/Authentication";
 
+// This is pretty short and sweet. It makes sure that it renders based on whether or not the user is logged in.
 const Navigation = () => {
+  // This is how it gets the authentication info.
   const authContext = useContext(Authentication);
 
   useEffect(() => {}, [authContext.logout]);
@@ -50,6 +51,5 @@ const Navigation = () => {
         </ul>
       </Card>
     );
-  return <FailedRender />;
 };
 export default Navigation;
