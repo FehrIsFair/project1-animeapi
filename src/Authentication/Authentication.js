@@ -55,7 +55,6 @@ const AuthProvider = ({ children }) => {
   //const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const [favorite, setFavorite] = useState();
-  const [objectList, setObjectList] = useState();
 
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
@@ -64,13 +63,6 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  const convertFavoriteListToObject = () => {
-    if (list) {
-      for (let value of list) {
-        setObjectList({ ...objectList, value });
-      }
-    }
-  };
   const favoriteHandler = (_favorite) => {
     setFavorite(_favorite);
   };

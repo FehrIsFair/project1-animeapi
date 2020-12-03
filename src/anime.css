@@ -136,8 +136,8 @@ select {
 .loggedIn {
   background-color: #112e00 !important;
   margin-top: 0;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
+  border-top-right-radius: 0 !important;
+  border-top-left-radius: 0 !important;
 }
 
 #login {
@@ -217,4 +217,9 @@ h4.resultTitle {
   float: right;
   margin: 2%;
   margin-top: 1.5%;
+}
+
+#searchFunction form {
+  display: flex;
+  flex-direction: row;
 }

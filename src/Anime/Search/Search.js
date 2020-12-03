@@ -84,8 +84,9 @@ const Search = () => {
 
   async function getResults(newCall) {
     setNewSearch(false);
+    //This is configured to ensure the correct anime at least pop up correctly with the mature content filter on. Otherwise titles like Black Clover and My Hero Academia won't ever show up.
     const { data } = await jikanApi.get(
-      `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0`
+      `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0&order_by=members&sort=desc`
     );
     setNewSearch(true);
     setSearchResults(data.results);
@@ -97,7 +98,7 @@ const Search = () => {
     });
     async function getResults(newCall) {
       const { data } = await jikanApi.get(
-        `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0`
+        `search/anime?q=${newCall}&genre=12&genre_exclude=0`
       );
       return data.results;
     }
