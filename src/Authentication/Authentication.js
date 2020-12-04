@@ -66,6 +66,33 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
+  // Firebase admin constant
+  const admin = require("firebase-admin");
+  // db constant
+  const db = admin.database();
+  const ref = db.ref("");
+
+  // Converts the list array to an object.
+  const convertListArrayToObject = () => {
+    let newObj = {};
+    for (let value of list) {
+      newObj = { ...newObj, value }; // Don't know if this is effecient or not.
+    }
+    return newObj;
+  };
+
+  // Saves to the firebase server by setting the new value.
+  const saveToServer = () => {
+    let usersRef = ref.child("users");
+    usersRef.set({
+      uid: {
+        favoriteList: {
+          ...convertListArrayToObject(),
+        },
+      },
+    });
+  };
+
   // This handles the now depricated
   const favoriteHandler = (_favorite) => {
     setFavorite(_favorite);
@@ -84,6 +111,7 @@ const AuthProvider = ({ children }) => {
   };
   // Just the logout function
   const logoutHandler = () => {
+    //saveToServer(); // needs to make sure the favoriteList is saved first before logging out.
     return firebase.auth().signOut();
   };
   // This build the favorite list.

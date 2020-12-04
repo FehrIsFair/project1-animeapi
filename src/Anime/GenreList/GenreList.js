@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, List, ListItem, Typography } from "@material-ui/core";
 
+// Just maps out the genres array.
 const GenreList = ({ genres }) => {
   return (
     <Card id="genre">
