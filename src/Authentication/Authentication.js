@@ -70,6 +70,7 @@ const AuthProvider = ({ children }) => {
   const admin = require("firebase-admin");
   // db constant
   const db = admin.database();
+  // ref constant
   const ref = db.ref("");
 
   // Converts the list array to an object.
@@ -83,7 +84,7 @@ const AuthProvider = ({ children }) => {
 
   // Saves to the firebase server by setting the new value.
   const saveToServer = () => {
-    let usersRef = ref.child("users");
+    const usersRef = ref.child("users");
     usersRef.set({
       uid: {
         favoriteList: {
