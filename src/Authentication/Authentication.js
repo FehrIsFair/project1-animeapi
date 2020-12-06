@@ -1,6 +1,6 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import firebase from "../lib/firebase";
+import firebase, { db } from "../lib/firebase";
 
 // This is just the initial state of the authentication.
 const initialAuthState = {
@@ -61,19 +61,14 @@ const AuthProvider = ({ children }) => {
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
 
+  const ref = db.collection("users").doc("favorite-list");
+
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  // Firebase admin constant
-  const admin = require("firebase-admin");
-  // db constant
-  const db = admin.database();
-  // ref constant
-  const ref = db.ref("");
-
-  // Converts the list array to an object.
+  // Converts the list array to an object. It returns an object that's a converted array for easy storage in firebase
   const convertListArrayToObject = () => {
     let newObj = {};
     for (let value of list) {
@@ -112,7 +107,6 @@ const AuthProvider = ({ children }) => {
   };
   // Just the logout function
   const logoutHandler = () => {
-    //saveToServer(); // needs to make sure the favoriteList is saved first before logging out.
     return firebase.auth().signOut();
   };
   // This build the favorite list.
@@ -122,6 +116,7 @@ const AuthProvider = ({ children }) => {
       anime = data;
     }
     setList([...list, anime]);
+    saveToServer();
   };
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
@@ -149,35 +144,38 @@ const AuthProvider = ({ children }) => {
   };
 
   // This is juse the logic used to make sure the user is authenticated between sessions and if they logout correctly sets the state so that isAuthenticated returns false.
-  useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        dispatch({
-          type: "AUTH_STATE_CHANGED",
-          payload: {
-            isAuthenticated: true,
-            user: {
-              id: user.uid,
-              avatar: user.photoURL,
-              email: user.email,
-              name: user.displayName || user.email,
-              tier: "Premium",
+  useEffect(
+    (admin) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          dispatch({
+            type: "AUTH_STATE_CHANGED",
+            payload: {
+              isAuthenticated: true,
+              user: {
+                id: user.uid,
+                avatar: user.photoURL,
+                email: user.email,
+                name: user.displayName || user.email,
+                tier: "Premium",
+              },
             },
-          },
-        });
-      } else {
-        dispatch({
-          type: "AUTH_STATE_CHANGED",
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        });
-      }
-    });
-
-    return unsubscribe;
-  }, [dispatch]);
+          });
+        } else {
+          dispatch({
+            type: "AUTH_STATE_CHANGED",
+            payload: {
+              isAuthenticated: false,
+              user: null,
+            },
+          });
+        }
+      });
+      admin.initializeApp();
+      return unsubscribe;
+    },
+    [dispatch]
+  );
 
   return (
     <Authentication.Provider
