@@ -4,11 +4,11 @@ import { firebaseConfig } from "../config";
 
 // Firebase admin constant
 const admin = require("firebase-admin");
+
 //Service Account
-const serviceAccount = require(process.env.PATH_TO_FIREBASE_ADMIN_KEY);
+const serviceAccount = require("../Confidential/school-project-19319-firebase-adminsdk-hntw6-95b67a2244.json");
 
 // db constant
-export const db = admin.database();
 
 if (!firebase.apps.length) {
   console.log(process.env);
@@ -17,5 +17,5 @@ if (!firebase.apps.length) {
     credential: admin.credential.cert(serviceAccount),
   });
 }
-
+export const db = admin.firestore();
 export default firebase;
