@@ -61,8 +61,6 @@ const AuthProvider = ({ children }) => {
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
 
-  const ref = db.collection("users").doc("favorite-list");
-
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
@@ -75,18 +73,6 @@ const AuthProvider = ({ children }) => {
       newObj = { ...newObj, value }; // Don't know if this is effecient or not.
     }
     return newObj;
-  };
-
-  // Saves to the firebase server by setting the new value.
-  const saveToServer = () => {
-    const usersRef = ref.child("users");
-    usersRef.set({
-      uid: {
-        favoriteList: {
-          ...convertListArrayToObject(),
-        },
-      },
-    });
   };
 
   // This handles the now depricated
@@ -116,7 +102,6 @@ const AuthProvider = ({ children }) => {
       anime = data;
     }
     setList([...list, anime]);
-    saveToServer();
   };
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
@@ -171,7 +156,6 @@ const AuthProvider = ({ children }) => {
           });
         }
       });
-      admin.initializeApp();
       return unsubscribe;
     },
     [dispatch]
