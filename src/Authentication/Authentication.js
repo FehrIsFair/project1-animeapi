@@ -1,6 +1,6 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import firebase, { db } from "../lib/firebase";
+import firebase from "../lib/firebase";
 
 // This is just the initial state of the authentication.
 const initialAuthState = {
@@ -60,19 +60,50 @@ const AuthProvider = ({ children }) => {
   const [favorite, setFavorite] = useState();
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
+  const [idList, setIdList] = useState();
+
+  const db = firebase.firestore();
 
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  // Converts the list array to an object. It returns an object that's a converted array for easy storage in firebase
-  const convertListArrayToObject = () => {
-    let newObj = {};
+  // Converts the list object array into a number array for easy storage in firebase
+  const convertObjArrayToNumberArray = () => {
+    let newArray = [];
     for (let value of list) {
-      newObj = { ...newObj, value }; // Don't know if this is effecient or not.
+      newArray.push(value.mal_id);
     }
-    return newObj;
+    setIdList(newArray);
+  };
+
+  // Makes the new favoriteList on app load
+  const setupFavoriteListOnLoad = (numberArray) => {
+    let newArray = [];
+    for (let value of numberArray) {
+      let { data } = getAnime(value);
+      newArray = [...newArray, data];
+    }
+    setList(newArray);
+  };
+
+  // Stores the new array into firebase
+  const storeInFirebase = async () => {
+    convertObjArrayToNumberArray();
+    await db.collection("favoriteList").doc("list").set(idList);
+  };
+
+  // Loads the firebase data
+  const loadFirebaseData = async () => {
+    const { col } = await db.collection("favoriteList").get();
+    setupFavoriteListOnLoad(col.doc);
+  };
+
+  // Jikan Method
+  const getAnime = async (mal_id) => {
+    const { data } = await jikanApi.get(`anime/${value}`);
+    return data;
   };
 
   // This handles the now depricated
@@ -98,10 +129,10 @@ const AuthProvider = ({ children }) => {
   // This build the favorite list.
   const favoriteListBuilder = async (anime, searchResult) => {
     if (searchResult) {
-      const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
-      anime = data;
+      anime = getAnime(searchResult.mal_id);
     }
     setList([...list, anime]);
+    storeInFirebase();
   };
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
@@ -156,6 +187,8 @@ const AuthProvider = ({ children }) => {
           });
         }
       });
+      db.settings({ timestampsInSnapshots: true });
+      loadFirebaseData();
       return unsubscribe;
     },
     [dispatch]
