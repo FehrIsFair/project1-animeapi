@@ -1,6 +1,6 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import firebase, { admin } from "../lib/firebase";
+import firebase from "../lib/firebase";
 import "firebase/firestore";
 
 // This is just the initial state of the authentication.
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }) => {
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  const db = admin.firestore();
+  const db = firebase.firestore();
 
   // Converts the list object array into a number array for easy storage in firebase
   const convertObjArrayToNumberArray = () => {
