@@ -1,6 +1,7 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import firebase from "../lib/firebase";
+import firebase, { admin } from "../lib/firebase";
+import "firebase/firestore";
 
 // This is just the initial state of the authentication.
 const initialAuthState = {
@@ -15,6 +16,7 @@ const initialAuthState = {
   click: () => {},
   searchList: () => {},
   addFavorite: () => {},
+  loadData: () => {},
   removeFavorite: () => {},
 };
 
@@ -48,6 +50,7 @@ export const Authentication = createContext({
   signInWithGoogle: () => Promise.resolve(),
   signInWithEmailAndPassword: () => Promise.resolve(),
   createUserWithEmailAndPassword: () => Promise.resolve(),
+  loadFirebaseData: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   clickedAnime: "",
   favoriteList: [],
@@ -62,12 +65,12 @@ const AuthProvider = ({ children }) => {
   const [list, setList] = useState([]);
   const [idList, setIdList] = useState();
 
-  const db = firebase.firestore();
-
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
+
+  const db = admin.firestore();
 
   // Converts the list object array into a number array for easy storage in firebase
   const convertObjArrayToNumberArray = () => {
@@ -96,13 +99,14 @@ const AuthProvider = ({ children }) => {
 
   // Loads the firebase data
   const loadFirebaseData = async () => {
+    db.settings({ timestampsInSnapshots: true });
     const { col } = await db.collection("favoriteList").get();
     setupFavoriteListOnLoad(col.doc);
   };
 
   // Jikan Method
   const getAnime = async (mal_id) => {
-    const { data } = await jikanApi.get(`anime/${value}`);
+    const { data } = await jikanApi.get(`anime/${mal_id}`);
     return data;
   };
 
@@ -187,8 +191,6 @@ const AuthProvider = ({ children }) => {
           });
         }
       });
-      db.settings({ timestampsInSnapshots: true });
-      loadFirebaseData();
       return unsubscribe;
     },
     [dispatch]
@@ -208,6 +210,7 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         createUserWithEmailAndPassword,
         favoriteHandler: favoriteHandler,
+        loadFirebaseData: loadFirebaseData,
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,
