@@ -1,6 +1,6 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import firebase from "../lib/firebase";
+import app from "../lib/firebase";
 import "firebase/firestore";
 
 // This is just the initial state of the authentication.
@@ -17,6 +17,7 @@ const initialAuthState = {
   searchList: () => {},
   addFavorite: () => {},
   loadData: () => {},
+  sendData: () => {},
   removeFavorite: () => {},
 };
 
@@ -46,12 +47,13 @@ const reducer = (state, action) => {
 // It also handles the search and favorites. As well as the authentication process.
 export const Authentication = createContext({
   ...initialAuthState,
-  method: "firebaseAuth",
+  method: "appAuth",
   signInWithGoogle: () => Promise.resolve(),
   signInWithEmailAndPassword: () => Promise.resolve(),
   createUserWithEmailAndPassword: () => Promise.resolve(),
-  loadFirebaseData: () => Promise.resolve(),
+  loadAppData: () => Promise.resolve(),
   logout: () => Promise.resolve(),
+  sendAppData: () => Promise.resolve(),
   clickedAnime: "",
   favoriteList: [],
 });
@@ -63,52 +65,53 @@ const AuthProvider = ({ children }) => {
   const [favorite, setFavorite] = useState();
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
-  //const [idList, setIdList] = useState();
 
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  //const db = firebase.firestore();
+  const db = app.firestore();
 
-  // Converts the list object array into a number array for easy storage in firebase
-  // const convertObjArrayToNumberArray = () => {
-  //   let newArray = [];
-  //   for (let value of list) {
-  //     newArray.push(value.mal_id);
-  //   }
-  //   setIdList(newArray);
-  // };
+  // Converts the list object array into a number array for easy storage in app
+  const convertObjArrayToNumberArray = () => {
+    let newArray = [];
+    for (let value of list) {
+      newArray.push(value.mal_id);
+    }
+    return newArray;
+  };
 
   // Makes the new favoriteList on app load
-  // const setupFavoriteListOnLoad = (numberArray) => {
-  //   let newArray = [];
-  //   for (let value of numberArray) {
-  //     let { data } = getAnime(value);
-  //     newArray = [...newArray, data];
-  //   }
-  //   setList(newArray);
-  // };
+  const setupFavoriteListOnLoad = async (numberArray) => {
+    let newArray = [];
+    for (let value of numberArray) {
+      let { data } = await jikanApi.get(`anime/${value}`);
+      newArray = [...newArray, data];
+    }
+    setList(newArray);
+  };
 
-  // Stores the new array into firebase
-  // const storeInFirebase = async () => {
-  //   convertObjArrayToNumberArray();
-  //   await db.collection("favoriteList").doc("list").set(idList);
-  // };
+  // Stores the new array into app
+  const storeInapp = async () => {
+    await db
+      .collection("favoriteList")
+      .doc("xPEEHOjwukpnkb6AFD1c")
+      .set({
+        list: [...convertObjArrayToNumberArray()],
+      });
+  };
 
-  // Loads the firebase data
-  // const loadFirebaseData = async () => {
-  //   db.settings({ timestampsInSnapshots: true });
-  //   const { col } = await db.collection("favoriteList").get();
-  //   setupFavoriteListOnLoad(col.doc);
-  // };
-
-  // Jikan Method
-  // const getAnime = async (mal_id) => {
-  //   const { data } = await jikanApi.get(`anime/${mal_id}`);
-  //   return data;
-  // };
+  // Loads the app data
+  const loadAppData = async () => {
+    db.settings({ timestampsInSnapshots: true });
+    await db
+      .collection("favoriteList")
+      .get()
+      .then((snapshot) => {
+        setupFavoriteListOnLoad(snapshot.docs[0]);
+      });
+  };
 
   // This handles the now depricated
   const favoriteHandler = (_favorite) => {
@@ -116,19 +119,19 @@ const AuthProvider = ({ children }) => {
   };
   // This group handles the sign up and login functinality. Email/Password, Google Account, and hanldes crateing an account with an email and password.
   const signInWithEmailAndPassword = async (email, password) => {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return app.auth().signInWithEmailAndPassword(email, password);
   };
   const createUserWithEmailAndPassword = async (email, password) => {
-    return firebase.auth().createUserWithEmailAndPassword(email, password);
+    return app.auth().createUserWithEmailAndPassword(email, password);
   };
   const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new app.auth.GoogleAuthProvider();
 
-    return firebase.auth().signInWithPopup(provider);
+    return app.auth().signInWithPopup(provider);
   };
   // Just the logout function
   const logoutHandler = () => {
-    return firebase.auth().signOut();
+    return app.auth().signOut();
   };
   // This build the favorite list.
   const favoriteListBuilder = async (anime, searchResult) => {
@@ -137,8 +140,9 @@ const AuthProvider = ({ children }) => {
       anime = data;
     }
     setList([...list, anime]);
-    //storeInFirebase();
+    storeInapp();
   };
+
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
     let foundItem = false;
@@ -158,6 +162,7 @@ const AuthProvider = ({ children }) => {
       }
     }
     setList(newList);
+    storeInapp();
   };
   // This makes sure that the clicked anime is remembered after going towards the anime page.
   const setClickedHandler = (click) => {
@@ -167,7 +172,7 @@ const AuthProvider = ({ children }) => {
   // This is juse the logic used to make sure the user is authenticated between sessions and if they logout correctly sets the state so that isAuthenticated returns false.
   useEffect(
     (admin) => {
-      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      const unsubscribe = app.auth().onAuthStateChanged((user) => {
         if (user) {
           dispatch({
             type: "AUTH_STATE_CHANGED",
@@ -201,7 +206,7 @@ const AuthProvider = ({ children }) => {
     <Authentication.Provider
       value={{
         ...state,
-        method: "FirebaseAuth",
+        method: "firebaseAuth",
         logout: logoutHandler,
         signInWithEmailAndPassword,
         click: setClickedHandler,
@@ -211,7 +216,8 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         createUserWithEmailAndPassword,
         favoriteHandler: favoriteHandler,
-
+        loadAppData: loadAppData,
+        sendAppData: storeInapp,
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,

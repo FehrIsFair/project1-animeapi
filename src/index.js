@@ -3,17 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { FirebaseDatabaseProvider } from "@react-firebase/database";
 
 import AuthProvider from "./Authentication/Authentication";
 
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseDatabaseProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </FirebaseDatabaseProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
