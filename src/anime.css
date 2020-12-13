@@ -269,3 +269,21 @@ h4.resultTitle {
 #sourse a {
   margin: 2% !important;
 }
+
+.searchButton {
+  width: 6%;
+  margin-left: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.searchInput {
+  margin-right: 0 !important;
+}
+
+.searchInput div {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: none !important;
+}

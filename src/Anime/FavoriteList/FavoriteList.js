@@ -22,6 +22,8 @@ const transitionStyles = {
 };
 
 // The Component proper
+// Because of the way I constructed this component, using the GeneralInfo Component causes an infinite loop
+// So, this will stay the way it is because I didn't want to debug that.
 const FavoriteList = () => {
   // Hooks needed for the page to function.
   const AuthContext = useContext(Authentication);

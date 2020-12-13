@@ -1,27 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Button, Card, Typography } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 
 import GenreList from "./GenreList/GenreList";
+import GeneralInfo from "./GeneralInfo/GeneralInfo";
 import OtherInfo from "./OtherInfo/OtherInfo";
 import { Authentication } from "../Authentication/Authentication";
-//import Related from "./related";
-
-/* The related.js component ended up being handled different based on the
-      anime called. Like, Alternate version could be alternate scenario in
-      another. So I wasn't sure how to handle that info as it also wasn't an
-      array, making it hard to even itterate through. */
 
 const Anime = () => {
   // Hooks needed in order for the view to function.
   const [anime, setAnime] = useState();
   const authContext = useContext(Authentication);
-
-  // adds a favorite to the favorite list
-  const addFavorite = () => {
-    authContext.addFavorite(anime);
-  };
 
   // Logic for setting up the view for the view
   useEffect(() => {
@@ -48,50 +38,7 @@ const Anime = () => {
 
   return (
     <Card id="container">
-      <Card id="synopsis">
-        <img
-          src={anime?.image_url}
-          alt={`${anime?.title} Promotional Art`}
-          style={{
-            width: "225px !important",
-            height: "346px",
-          }}
-        />
-        <div id="scoreSyn">
-          <div id="titleContain">
-            <Typography id="animeTitle" variant="h4">
-              {anime?.title}
-            </Typography>
-          </div>
-          {
-            // conditional rednering for the add/remove button of the favorite list.
-            authContext.searchList(anime?.mal_id) ? (
-              <Button
-                variant="contained"
-                onClick={() => authContext.removeFavorite(anime?.mal_id)}
-              >
-                Remove
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                onClick={() => addFavorite(anime, false)}
-              >
-                Add
-              </Button>
-            )
-          }
-          <Typography className="score">
-            <span className="bold">Score:</span> {anime?.score}/10
-          </Typography>
-
-          <div id="synText">
-            <Typography>Synopsis:</Typography>
-            <Typography>{anime?.synopsis}</Typography>
-          </div>
-        </div>
-      </Card>
-
+      <GeneralInfo anime={anime} searchResult={false} styles={null} />
       {/* These components are mainly static and don't have any special function
           They only take the props given and map them out. In some cases only if they have something to map out.
     */}

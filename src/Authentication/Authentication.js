@@ -65,53 +65,12 @@ const AuthProvider = ({ children }) => {
   const [favorite, setFavorite] = useState();
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
-
-  const db = app.firestore();
-
-  // Converts the list object array into a number array for easy storage in app
-  const convertObjArrayToNumberArray = () => {
-    let newArray = [];
-    for (let value of list) {
-      newArray.push(value.mal_id);
-    }
-    return newArray;
-  };
-
-  // Makes the new favoriteList on app load
-  const setupFavoriteListOnLoad = async (numberArray) => {
-    let newArray = [];
-    for (let value of numberArray) {
-      let { data } = await jikanApi.get(`anime/${value}`);
-      newArray = [...newArray, data];
-    }
-    setList(newArray);
-  };
-
-  // Stores the new array into app
-  const storeInapp = async () => {
-    await db
-      .collection("favoriteList")
-      .doc("xPEEHOjwukpnkb6AFD1c")
-      .set({
-        list: [...convertObjArrayToNumberArray()],
-      });
-  };
-
-  // Loads the app data
-  const loadAppData = async () => {
-    db.settings({ timestampsInSnapshots: true });
-    await db
-      .collection("favoriteList")
-      .get()
-      .then((snapshot) => {
-        setupFavoriteListOnLoad(snapshot.docs[0]);
-      });
-  };
 
   // This handles the now depricated
   const favoriteHandler = (_favorite) => {
@@ -139,16 +98,21 @@ const AuthProvider = ({ children }) => {
       const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
       anime = data;
     }
-    setList([...list, anime]);
-    storeInapp();
+    if (list) {
+      setList([...list, anime]);
+    } else {
+      setList([anime]);
+    }
   };
 
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
     let foundItem = false;
-    for (let value of list) {
-      if (value.mal_id === mal_id) {
-        foundItem = true;
+    if (list) {
+      for (let value of list) {
+        if (value.mal_id === mal_id) {
+          foundItem = true;
+        }
       }
     }
     return foundItem;
@@ -161,8 +125,8 @@ const AuthProvider = ({ children }) => {
         newList = [...newList, value];
       }
     }
+
     setList(newList);
-    storeInapp();
   };
   // This makes sure that the clicked anime is remembered after going towards the anime page.
   const setClickedHandler = (click) => {
@@ -202,6 +166,55 @@ const AuthProvider = ({ children }) => {
     [dispatch]
   );
 
+  useEffect(() => {
+    const jikanApi = axios.create({
+      baseURL: "https://api.jikan.moe/v3/",
+    });
+    const db = app.firestore();
+    const storeInapp = async () => {
+      await db
+        .collection("favoriteList")
+        .doc("xPEEHOjwukpnkb6AFD1c")
+        .set({
+          list: [...convertObjArrayToNumberArray()],
+        });
+    };
+    const convertObjArrayToNumberArray = () => {
+      let newArray = [];
+      for (let value of list) {
+        newArray.push(value.mal_id);
+      }
+      return newArray;
+    };
+    // Makes the new favoriteList on app load
+    const setupFavoriteListOnLoad = async (numberArray) => {
+      let newArray = [];
+      for (let value of numberArray) {
+        let { data } = await jikanApi.get(`anime/${value}`);
+        newArray = [...newArray, data];
+      }
+      setList(newArray);
+    };
+
+    // Loads the app data
+    const loadAppData = async () => {
+      let doc = await db
+        .collection("favoriteList")
+        .doc("xPEEHOjwukpnkb6AFD1c")
+        .get();
+      console.log(doc.data());
+      let dataArray = [...doc.data().list];
+      console.log(dataArray);
+      setupFavoriteListOnLoad(dataArray);
+      setDataLoaded(true);
+    };
+    if (!dataLoaded) {
+      loadAppData();
+    } else {
+      storeInapp();
+    }
+  }, [list, dataLoaded]);
+
   return (
     <Authentication.Provider
       value={{
@@ -216,8 +229,6 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         createUserWithEmailAndPassword,
         favoriteHandler: favoriteHandler,
-        loadAppData: loadAppData,
-        sendAppData: storeInapp,
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,

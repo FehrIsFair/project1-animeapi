@@ -1,60 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Card, Button, TextField, Typography, Link } from "@material-ui/core";
+import { Card, Button, TextField } from "@material-ui/core";
 import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Transition from "react-transition-group/Transition";
+import { FiSearch } from "react-icons/fi";
 
 import { Authentication } from "../../Authentication/Authentication";
+import GeneralInfo from "../GeneralInfo/GeneralInfo";
 
-// As a heads up, if the JSX ends up looking like its all one color, thats the ? marks.
-// They do that but they don't trigger any warnings. I'm thinking it has something to do with VS Code and its code stylings.
-const Synopsis = (props) => {
-  // Hooks to help the component and page function.
-  const [showAll, setShowAll] = useState(false);
-  const limit = 300;
-  const content = props.result.synopsis;
-  const toShow = content.substring(0, limit) + "...";
-
-  // This I don't think every worked. Mainly because the synopsis, upon further investigation, wasn't the full one to begin with so I wasted my time here.
-  const showMore = () => {
-    setShowAll(true);
-  };
-
-  const showLess = () => {
-    setShowAll(false);
-  };
-
-  useEffect(() => {}, [setShowAll]);
-
-  if (content.length <= limit) {
-    return (
-      <div id="synText">
-        <Typography>Synopsis:</Typography>
-        <Typography>{props.result.synopsis}</Typography>
-      </div>
-    );
-  }
-
-  if (showAll) {
-    return (
-      <div id="synText">
-        <Typography>Synopsis:</Typography>
-        <Typography>{props.result.synopsis}</Typography>
-        <Button onClick={showLess}>Read Less</Button>
-      </div>
-    );
-  }
-
-  return (
-    <div id="synText">
-      <Typography>Synopsis:</Typography>
-      <Typography>{toShow}</Typography>
-      <Button onClick={showMore}>Read Less</Button>
-    </div>
-  );
-};
 // Transistion States
 const transitionStyles = {
   entering: {
@@ -77,13 +32,6 @@ const Search = () => {
   const authContext = useContext(Authentication);
   const [searchResults, setSearchResults] = useState();
   const [newSearch, setNewSearch] = useState(true);
-  const history = useHistory();
-
-  // Redirect function to take it to the anime.js page and ensures it loads the reqested anime.
-  const redirectToAnimePage = (malID) => {
-    authContext.click(malID);
-    history.push("/Anime");
-  };
 
   // JikanAPI reference.
   const jikanApi = axios.create({
@@ -164,7 +112,7 @@ const Search = () => {
               <TextField
                 id="outlined-basic"
                 name="searchTerm"
-                className="textfield"
+                className="textfield searchInput"
                 label="Search..."
                 variant="outlined"
                 onBlur={handleBlur}
@@ -177,8 +125,9 @@ const Search = () => {
                 variant="contained"
                 type="submit"
                 disabled={errors.searchTerm}
+                className="searchButton"
               >
-                Search
+                <FiSearch />
               </Button>
             </form>
           )}
@@ -188,47 +137,16 @@ const Search = () => {
         // This renders the results and gives them an animation that gives the impression that they are loading in.
         <Transition in={newSearch} timeout={1000} mountOnEnter unmountOnExit>
           {(state) => (
-            <Card
-              className="result"
+            <GeneralInfo
+              anime={result}
+              searchResult={true}
               style={
                 ({
                   transition: "opacity 1s ease-out",
                 },
                 transitionStyles[state])
               }
-            >
-              <img
-                className="resultImage"
-                src={result?.image_url}
-                alt={`${result?.title} Promotional Art`}
-              />
-              <div classNames="titleScore">
-                <Typography className="resultTitle" variant="h4">
-                  <Link onClick={() => redirectToAnimePage(result?.mal_id)}>
-                    {result?.title}
-                  </Link>
-                </Typography>
-                {authContext.searchList(result?.mal_id) ? (
-                  <Button
-                    variant="contained"
-                    onClick={() => authContext.removeFavorite(result?.mal_id)}
-                  >
-                    Remove
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => authContext.addFavorite(result, true)}
-                  >
-                    Add
-                  </Button>
-                )}
-                <Typography variant="p" className="score">
-                  Score: {result?.score}
-                </Typography>
-              </div>
-              <Synopsis result={result} />
-            </Card>
+            />
           )}
         </Transition>
       ))}
