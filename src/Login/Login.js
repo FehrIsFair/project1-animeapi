@@ -23,6 +23,10 @@ const Login = () => {
     }
   };
 
+  if (authContext.isAuthenticated) {
+    history.push("/Search");
+  }
+
   return (
     <Card id="login">
       <h4>Login</h4>

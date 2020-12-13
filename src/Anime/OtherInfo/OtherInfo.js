@@ -1,9 +1,10 @@
 import React from "react";
 import "../../anime.css";
-import { Card, Typography, List, ListItem } from "@material-ui/core";
+import { Card, Typography, List, ListItem, Link } from "@material-ui/core";
 
 // This literally just renders the other titles info and the adaptation info if ther eis info to display.
 const OtherInfo = (props) => {
+  const space = " ";
   return (
     <Card>
       {props.title_synonyms.length !== 0 ? (
@@ -18,11 +19,14 @@ const OtherInfo = (props) => {
       ) : null}
       {!props.related?.Adaptation?.length ? null : (
         <div id="source" styles="">
-          <Typography variant="h4">Based on:</Typography>
-          <Typography className="adatation">
-            <a href={props.related.Adaptation[0].url}>
+          <Typography variant="p">
+            Based on:
+            {
+              space /*this wouldn't let me put a space here manually so I had to do some trickery*/
+            }
+            <Link className="link" href={props.related.Adaptation[0].url}>
               {props.related.Adaptation[0].name}
-            </a>
+            </Link>
           </Typography>
         </div>
       )}

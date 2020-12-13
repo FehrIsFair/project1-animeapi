@@ -48,32 +48,6 @@ const Anime = () => {
 
   return (
     <Card id="container">
-      <Typography id="animeTitle" variant="h3">
-        {anime?.title}
-      </Typography>
-      <Card id="score">
-        <Typography>
-          <span className="bold">Rating:</span> {anime?.score}/10
-        </Typography>
-        {
-          // conditional rednering for the add/remove button of the favorite list.
-          authContext.searchList(anime?.mal_id) ? (
-            <Button
-              variant="contained"
-              onClick={() => authContext.removeFavorite(anime?.mal_id)}
-            >
-              Remove
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={() => addFavorite(anime, false)}
-            >
-              Add
-            </Button>
-          )
-        }
-      </Card>
       <Card id="synopsis">
         <img
           src={anime?.image_url}
@@ -83,10 +57,39 @@ const Anime = () => {
             height: "346px",
           }}
         />
-        <Card id="synText">
-          <Typography>Synopsis:</Typography>
-          <Typography>{anime?.synopsis}</Typography>
-        </Card>
+        <div id="scoreSyn">
+          <div id="titleContain">
+            <Typography id="animeTitle" variant="h4">
+              {anime?.title}
+            </Typography>
+          </div>
+          {
+            // conditional rednering for the add/remove button of the favorite list.
+            authContext.searchList(anime?.mal_id) ? (
+              <Button
+                variant="contained"
+                onClick={() => authContext.removeFavorite(anime?.mal_id)}
+              >
+                Remove
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => addFavorite(anime, false)}
+              >
+                Add
+              </Button>
+            )
+          }
+          <Typography className="score">
+            <span className="bold">Score:</span> {anime?.score}/10
+          </Typography>
+
+          <div id="synText">
+            <Typography>Synopsis:</Typography>
+            <Typography>{anime?.synopsis}</Typography>
+          </div>
+        </div>
       </Card>
 
       {/* These components are mainly static and don't have any special function

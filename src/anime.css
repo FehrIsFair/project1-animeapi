@@ -1,5 +1,7 @@
 .favSyn {
   display: flex;
+  margin: 2%;
+  width: 60%;
 }
 
 .favorite h4 {
@@ -19,20 +21,28 @@
 .favScore {
   display: flex;
   flex-direction: row;
-  padding: 1.3rem;
+  padding: 1rem;
 }
 
 .favScore h5 {
   margin-right: 0.8rem;
 }
 
-ul#genreList,
 div#synopsis {
+  display: block;
+}
+
+#synopsis {
+  background-color: #84bc62 !important;
+}
+
+ul#genreList {
   display: flex;
 }
 
 div#synopsis img {
   padding: 2%;
+  float: left;
 }
 
 #root {
@@ -74,14 +84,15 @@ h3 {
   margin: 2% !important;
 }
 
-#score {
-  display: block;
-  width: 30%;
-  text-align: center;
-  padding: 2%;
+#scoreSyn {
+  margin: 2%;
 }
 
-.bold {
+#scoreSyn button {
+  margin-top: 1% !important;
+}
+
+#scoreSyn .bold {
   font-weight: 900;
 }
 
@@ -93,6 +104,11 @@ h3 {
   margin: 2%;
 }
 
+#genreList li {
+  margin: 0 !important;
+  padding: 1% !important;
+}
+
 #container {
   padding: none;
 }
@@ -101,6 +117,7 @@ h3 {
 #other-titles,
 #genre {
   padding: 2%;
+  background-color: #84bc62 !important;
 }
 
 .nav {
@@ -211,6 +228,11 @@ h4.resultTitle {
 .footer {
   padding: 2% !important;
   text-align: center;
+  color: white !important;
+  background-color: #112e00 !important;
+  margin-bottom: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .avatar {
@@ -222,4 +244,28 @@ h4.resultTitle {
 #searchFunction form {
   display: flex;
   flex-direction: row;
+}
+
+.favoriteList {
+  background-color: #459032 !important;
+}
+
+.pageTitle {
+  margin: 2% !important;
+}
+
+.favorite {
+  background-color: #84bc62 !important;
+}
+
+#container {
+  background-color: #459032 !important;
+}
+
+#titleContain {
+  display: flex;
+}
+
+#sourse a {
+  margin: 2% !important;
 }

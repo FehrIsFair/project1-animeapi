@@ -30,29 +30,29 @@ const Synopsis = (props) => {
 
   if (content.length <= limit) {
     return (
-      <Card id="synText">
+      <div id="synText">
         <Typography>Synopsis:</Typography>
         <Typography>{props.result.synopsis}</Typography>
-      </Card>
+      </div>
     );
   }
 
   if (showAll) {
     return (
-      <Card id="synText">
+      <div id="synText">
         <Typography>Synopsis:</Typography>
         <Typography>{props.result.synopsis}</Typography>
         <Button onClick={showLess}>Read Less</Button>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card id="synText">
+    <div id="synText">
       <Typography>Synopsis:</Typography>
       <Typography>{toShow}</Typography>
       <Button onClick={showMore}>Read Less</Button>
-    </Card>
+    </div>
   );
 };
 // Transistion States

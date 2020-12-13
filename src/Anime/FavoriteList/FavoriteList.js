@@ -2,10 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { Card, Typography, Button, Link } from "@material-ui/core";
 import { Redirect, useHistory } from "react-router-dom";
 import { Transition } from "react-transition-group";
-import {
-  FirebaseDatabaseNode,
-  FirebaseDatabaseMutation,
-} from "@react-firebase/database";
 
 import { Authentication } from "../../Authentication/Authentication";
 
@@ -77,17 +73,10 @@ const FavoriteList = () => {
   }
 
   return (
-    <Card>
-      <Typography variant="h4">Favorite List</Typography>
-      <FirebaseDatabaseNode path="userSessions/">
-        {(data) => {
-          const { value } = data;
-          if (value === null || typeof value === "undefined") return null;
-        }}
-      </FirebaseDatabaseNode>
-      <FirebaseDatabaseMutation path="userSessions/" type="update">
-        {({ runMutation }) => {}}
-      </FirebaseDatabaseMutation>
+    <Card className="favoriteList">
+      <Typography className="pageTitle" variant="h4">
+        Favorite List
+      </Typography>
       {fullList.map((item) => {
         // Maps the array to the DOM.
         // Having a hard time getting the transition to function similarly to Search.js
@@ -127,11 +116,9 @@ const FavoriteList = () => {
                   </div>
                 </div>
                 <div className="favSyn">
-                  <Card>
-                    <Typography variant="p" className="">
-                      {item.synopsis}
-                    </Typography>
-                  </Card>
+                  <Typography variant="p" className="">
+                    {item.synopsis}
+                  </Typography>
                 </div>
               </Card>
             )}

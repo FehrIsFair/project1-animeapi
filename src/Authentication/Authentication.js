@@ -63,52 +63,52 @@ const AuthProvider = ({ children }) => {
   const [favorite, setFavorite] = useState();
   const [clicked, setClicked] = useState();
   const [list, setList] = useState([]);
-  const [idList, setIdList] = useState();
+  //const [idList, setIdList] = useState();
 
   // This is the jikanAPI
   const jikanApi = axios.create({
     baseURL: "https://api.jikan.moe/v3/",
   });
 
-  const db = firebase.firestore();
+  //const db = firebase.firestore();
 
   // Converts the list object array into a number array for easy storage in firebase
-  const convertObjArrayToNumberArray = () => {
-    let newArray = [];
-    for (let value of list) {
-      newArray.push(value.mal_id);
-    }
-    setIdList(newArray);
-  };
+  // const convertObjArrayToNumberArray = () => {
+  //   let newArray = [];
+  //   for (let value of list) {
+  //     newArray.push(value.mal_id);
+  //   }
+  //   setIdList(newArray);
+  // };
 
   // Makes the new favoriteList on app load
-  const setupFavoriteListOnLoad = (numberArray) => {
-    let newArray = [];
-    for (let value of numberArray) {
-      let { data } = getAnime(value);
-      newArray = [...newArray, data];
-    }
-    setList(newArray);
-  };
+  // const setupFavoriteListOnLoad = (numberArray) => {
+  //   let newArray = [];
+  //   for (let value of numberArray) {
+  //     let { data } = getAnime(value);
+  //     newArray = [...newArray, data];
+  //   }
+  //   setList(newArray);
+  // };
 
   // Stores the new array into firebase
-  const storeInFirebase = async () => {
-    convertObjArrayToNumberArray();
-    await db.collection("favoriteList").doc("list").set(idList);
-  };
+  // const storeInFirebase = async () => {
+  //   convertObjArrayToNumberArray();
+  //   await db.collection("favoriteList").doc("list").set(idList);
+  // };
 
   // Loads the firebase data
-  const loadFirebaseData = async () => {
-    db.settings({ timestampsInSnapshots: true });
-    const { col } = await db.collection("favoriteList").get();
-    setupFavoriteListOnLoad(col.doc);
-  };
+  // const loadFirebaseData = async () => {
+  //   db.settings({ timestampsInSnapshots: true });
+  //   const { col } = await db.collection("favoriteList").get();
+  //   setupFavoriteListOnLoad(col.doc);
+  // };
 
   // Jikan Method
-  const getAnime = async (mal_id) => {
-    const { data } = await jikanApi.get(`anime/${mal_id}`);
-    return data;
-  };
+  // const getAnime = async (mal_id) => {
+  //   const { data } = await jikanApi.get(`anime/${mal_id}`);
+  //   return data;
+  // };
 
   // This handles the now depricated
   const favoriteHandler = (_favorite) => {
@@ -133,10 +133,11 @@ const AuthProvider = ({ children }) => {
   // This build the favorite list.
   const favoriteListBuilder = async (anime, searchResult) => {
     if (searchResult) {
-      anime = getAnime(searchResult.mal_id);
+      const { data } = await jikanApi.get(`anime/${anime.mal_id}`);
+      anime = data;
     }
     setList([...list, anime]);
-    storeInFirebase();
+    //storeInFirebase();
   };
   // Searches the list and returns a bool that determines if the add button is a remove button and vice versa.
   const favoriteListSearcher = (mal_id) => {
@@ -210,7 +211,7 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         createUserWithEmailAndPassword,
         favoriteHandler: favoriteHandler,
-        loadFirebaseData: loadFirebaseData,
+
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,
