@@ -61,7 +61,7 @@ const Navigation = () => {
   return (
     <CSSTransition
       in={authContext.isAuthenticated}
-      timeout={1000}
+      timeout={200}
       classNames="slide"
     >
       <NavContent isAuth={authContext.isAuthenticated} />
