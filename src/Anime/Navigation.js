@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Avatar } from "@material-ui/core";
+import { CSSTransition } from "react-transition-group";
 
 import { Authentication } from "../Authentication/Authentication";
 
@@ -11,45 +12,57 @@ const Navigation = () => {
 
   useEffect(() => {}, [authContext.logout]);
 
-  if (authContext.isAuthenticated === false)
+  if (!authContext.isAuthenticated)
     return (
-      <Card className="loggedOut">
-        <ul className="nav">
-          <li>
-            <Link to="/">
-              <Button>Sign In</Button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/SignUp">
-              <Button>Sign Up</Button>
-            </Link>
-          </li>
-        </ul>
-      </Card>
+      <CSSTransition
+        in={authContext.isAuthenticated}
+        timeout={1000}
+        classNames="slide"
+      >
+        <Card id="loggedOut">
+          <ul className="nav">
+            <li>
+              <Link to="/">
+                <Button>Sign In</Button>
+              </Link>
+            </li>
+            <li>
+              <Link to="/SignUp">
+                <Button>Sign Up</Button>
+              </Link>
+            </li>
+          </ul>
+        </Card>
+      </CSSTransition>
     );
-  if (authContext.isAuthenticated === true)
+  if (authContext.isAuthenticated)
     return (
-      <Card className="loggedIn">
-        <Avatar className="avatar" src={authContext.user.photoURL} />
-        <ul className="nav">
-          <li>
-            <Link to="/">
-              <Button onClick={authContext.logout}>Log Out</Button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/Search">
-              <Button>Search</Button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/Favorites">
-              <Button>Favorites</Button>
-            </Link>
-          </li>
-        </ul>
-      </Card>
+      <CSSTransition
+        in={authContext.isAuthenticated}
+        timeout={1000}
+        classNames="slide"
+      >
+        <Card id="loggedIn">
+          <Avatar className="avatar" src={authContext.user.photoURL} />
+          <ul className="nav">
+            <li>
+              <Link to="/">
+                <Button onClick={authContext.logout}>Log Out</Button>
+              </Link>
+            </li>
+            <li>
+              <Link to="/Search">
+                <Button>Search</Button>
+              </Link>
+            </li>
+            <li>
+              <Link to="/Favorites">
+                <Button>Favorites</Button>
+              </Link>
+            </li>
+          </ul>
+        </Card>
+      </CSSTransition>
     );
 };
 export default Navigation;

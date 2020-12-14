@@ -56,15 +56,15 @@ div#synopsis img {
   width: 960px;
 }
 
-.loggedOut button {
+#loggedOut button {
   background-color: #459032;
 }
 
-.loggedIn button {
+#loggedIn button {
   background-color: #459032;
 }
 
-.loggedIn button:hover {
+#loggedIn button:hover {
   background-color: #84bc62;
 }
 
@@ -76,7 +76,7 @@ ul a {
   text-decoration: none;
 }
 
-.loggedOut button:hover {
+#loggedOut button:hover {
   background-color: #84bc62;
 }
 
@@ -149,8 +149,8 @@ select {
   width: 100% !important;
 }
 
-.loggedOut,
-.loggedIn {
+#loggedOut,
+#loggedIn {
   background-color: #112e00 !important;
   margin-top: 0;
   border-top-right-radius: 0 !important;
@@ -286,4 +286,37 @@ h4.resultTitle {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   border-right: none !important;
+}
+
+.result-entering {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.result-entered {
+  opacity: 1;
+}
+.result-exiting {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+.result-exited {
+  opacity: 0;
+}
+
+.slide-enter {
+  opacity: 0.5;
+}
+
+.slide-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
+.slide-exit {
+  opacity: 0.5;
+}
+
+.slide-exit-active {
+  opacity: 0;
+  transition: opacity 1000ms ease-in;
 }

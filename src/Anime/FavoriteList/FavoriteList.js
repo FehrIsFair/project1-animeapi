@@ -29,15 +29,13 @@ const FavoriteList = () => {
   const AuthContext = useContext(Authentication);
   const [fullList, setFullList] = useState();
   const [listChange, setListChange] = useState(true);
-  const [showList, setShowList] = useState(true);
+  const [compLoad, setCompLoad] = useState(false);
   const history = useHistory();
 
   // This is mainly to track if the list has changed or not.
   const listChangeTracker = (mal_id) => {
-    setShowList(false);
     AuthContext.removeFavorite(mal_id);
     setListChange(true);
-    setShowList(true);
   };
 
   // this is another redirect to ensure the page is brought up with the correct data.
@@ -48,6 +46,9 @@ const FavoriteList = () => {
 
   // The logic to see if the view should rerender.
   useEffect(() => {
+    if (!compLoad && fullList) {
+      setCompLoad(true);
+    }
     const setListRender = async () => {
       if (listChange) {
         await setFullList(AuthContext.favoriteList);
@@ -55,7 +56,7 @@ const FavoriteList = () => {
       }
     };
     setListRender();
-  }, [listChange, AuthContext.favoriteList]);
+  }, [listChange, AuthContext.favoriteList, compLoad, fullList]);
 
   // Route Gaurding
   if (!AuthContext.isAuthenticated) {
@@ -75,16 +76,16 @@ const FavoriteList = () => {
   }
 
   return (
-    <Card className="favoriteList">
-      <Typography className="pageTitle" variant="h4">
-        Favorite List
-      </Typography>
-      {fullList.map((item) => {
-        // Maps the array to the DOM.
-        // Having a hard time getting the transition to function similarly to Search.js
-        return (
-          <Transition in={showList} timeout={1000} mountOnEnter unmountOnExit>
-            {(state) => (
+    <Transition in={compLoad} timeout={1000} mountOnEnter unmountOnExit>
+      {(state) => (
+        <Card className="favoriteList">
+          <Typography className="pageTitle" variant="h4">
+            Favorite List
+          </Typography>
+          {fullList.map((item) => {
+            // Maps the array to the DOM.
+            // Having a hard time getting the transition to function similarly to Search.js
+            return (
               <Card
                 className="favorite"
                 style={
@@ -123,11 +124,11 @@ const FavoriteList = () => {
                   </Typography>
                 </div>
               </Card>
-            )}
-          </Transition>
-        );
-      })}
-    </Card>
+            );
+          })}
+        </Card>
+      )}
+    </Transition>
   );
 };
 export default FavoriteList;

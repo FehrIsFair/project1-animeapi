@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Card, Typography, Link } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
@@ -6,13 +6,30 @@ import { Authentication } from "../../Authentication/Authentication";
 
 const GeneralInfo = ({ anime, searchResult, styles }) => {
   const authContext = useContext(Authentication);
+  const [added, setAdded] = useState();
   const history = useHistory();
+
+  const addRemoveFavorite = () => {
+    if (added) {
+      authContext.removeFavorite(anime.mal_id);
+    } else {
+      authContext.addFavorite(anime, searchResult);
+    }
+  };
 
   // this is another redirect to ensure the page is brought up with the correct data.
   const redirectToAnimePage = (malID) => {
     authContext.click(malID);
     history.push("/Anime");
   };
+
+  useEffect(() => {
+    if (authContext.searchList(anime.mal_id)) {
+      setAdded(true);
+    } else {
+      setAdded(false);
+    }
+  }, [authContext, anime]);
 
   return (
     <Card id="synopsis" style={styles}>
@@ -38,21 +55,11 @@ const GeneralInfo = ({ anime, searchResult, styles }) => {
             </Typography>
           )}
         </div>
-        {authContext.searchList(anime.mal_id) ? (
-          <Button
-            variant="contained"
-            onClick={() => authContext.removeFavorite(anime.mal_id)}
-          >
-            Remove
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            onClick={() => authContext.addFavorite(anime, searchResult)}
-          >
-            Add
-          </Button>
-        )}
+
+        <Button variant="contained" onClick={() => addRemoveFavorite()}>
+          {added ? "Remove" : "Add"}
+        </Button>
+
         <Typography className="score">
           <span className="bold">Score:</span> {anime.score}/10
         </Typography>

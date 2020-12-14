@@ -6,6 +6,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Transition from "react-transition-group/Transition";
 import { FiSearch } from "react-icons/fi";
+import LazyLoad from "react-lazyload";
 
 import { Authentication } from "../../Authentication/Authentication";
 import GeneralInfo from "../GeneralInfo/GeneralInfo";
@@ -31,7 +32,7 @@ const Search = () => {
   // Hooks for the component
   const authContext = useContext(Authentication);
   const [searchResults, setSearchResults] = useState();
-  const [newSearch, setNewSearch] = useState(true);
+  const [compLoad, setCompLoad] = useState(false);
 
   // JikanAPI reference.
   const jikanApi = axios.create({
@@ -40,13 +41,11 @@ const Search = () => {
 
   // This is sthe search function. This is how the view gets its results.
   async function getResults(newCall) {
-    setNewSearch(false);
     // This is configured to ensure the correct anime at least pop up correctly with the mature content filter on.
     // Otherwise titles like Black Clover and My Hero Academia won't ever show up.
     const { data } = await jikanApi.get(
       `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0&order_by=members&sort=desc`
     );
-    setNewSearch(true);
     setSearchResults(data.results);
   }
 
@@ -57,7 +56,7 @@ const Search = () => {
     });
     async function getResults(newCall) {
       const { data } = await jikanApi.get(
-        `search/anime?q=${newCall}&genre=12&genre_exclude=0`
+        `search/anime?q=${newCall}&limit=15&genre=12&genre_exclude=0&order_by=members&sort=desc`
       );
       return data.results;
     }
@@ -70,6 +69,12 @@ const Search = () => {
     setFirstSearch(authContext.favorite);
   }, [setSearchResults, authContext.favorite]);
 
+  useEffect(() => {
+    if (!compLoad && searchResults) {
+      setCompLoad(true);
+    }
+  }, [compLoad, searchResults]);
+
   // Route Gauarding
   if (!authContext.isAuthenticated) {
     return <Redirect to="/" />;
@@ -81,76 +86,84 @@ const Search = () => {
   }
 
   return (
-    <Card id="search">
-      <Card id="searchFunction">
-        {/* This is a similar setup to login and signup. But only tracks one value. Has a similar issue with validation warnings though */}
-        <Formik
-          initialValues={{
-            searchTerm: "",
-          }}
-          validationSchema={Yup.object().shape({
-            searchTerm: Yup.string().required("You must enter a search term."),
-          })}
-          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-            try {
-              await getResults(values.searchTerm);
-            } catch (err) {
-              console.error(err);
-            }
-          }}
+    <Transition in={compLoad} timeout={1000} mountOnEnter unmountOnExit>
+      {(state) => (
+        <Card
+          id="search"
+          style={
+            ({
+              transition: "opacity 1s ease-out",
+            },
+            transitionStyles[state])
+          }
         >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-          }) => (
-            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-              <TextField
-                id="outlined-basic"
-                name="searchTerm"
-                className="textfield searchInput"
-                label="Search..."
-                variant="outlined"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={Boolean(touched.searchTerm && errors.searchTerm)}
-                helpertext={touched.Username && errors.Username}
-                value={values.searchTerm}
-              />
-              <Button
-                variant="contained"
-                type="submit"
-                disabled={errors.searchTerm}
-                className="searchButton"
-              >
-                <FiSearch />
-              </Button>
-            </form>
-          )}
-        </Formik>
-      </Card>
-      {searchResults?.map((result) => (
-        // This renders the results and gives them an animation that gives the impression that they are loading in.
-        <Transition in={newSearch} timeout={1000} mountOnEnter unmountOnExit>
-          {(state) => (
-            <GeneralInfo
-              anime={result}
-              searchResult={true}
-              style={
-                ({
-                  transition: "opacity 1s ease-out",
-                },
-                transitionStyles[state])
-              }
-            />
-          )}
-        </Transition>
-      ))}
-    </Card>
+          <Card id="searchFunction">
+            {/* This is a similar setup to login and signup. But only tracks one value. Has a similar issue with validation warnings though */}
+            <Formik
+              initialValues={{
+                searchTerm: "",
+              }}
+              validationSchema={Yup.object().shape({
+                searchTerm: Yup.string().required(
+                  "You must enter a search term."
+                ),
+              })}
+              onSubmit={async (
+                values,
+                { setErrors, setStatus, setSubmitting }
+              ) => {
+                try {
+                  await getResults(values.searchTerm);
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                  <TextField
+                    id="outlined-basic"
+                    name="searchTerm"
+                    className="textfield searchInput"
+                    label="Search..."
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    error={Boolean(touched.searchTerm && errors.searchTerm)}
+                    helpertext={touched.Username && errors.Username}
+                    value={values.searchTerm}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={errors.searchTerm}
+                    className="searchButton"
+                  >
+                    <FiSearch />
+                  </Button>
+                </form>
+              )}
+            </Formik>
+          </Card>
+          {searchResults?.map((result) => (
+            // This renders the results and gives them an animation that gives the impression that they are loading in.
+            <>
+              <LazyLoad offset={100}>
+                <GeneralInfo anime={result} searchResult={true} />
+              </LazyLoad>
+            </>
+          ))}
+        </Card>
+      )}
+    </Transition>
   );
 };
 export default Search;
