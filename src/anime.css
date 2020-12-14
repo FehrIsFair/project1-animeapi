@@ -298,7 +298,6 @@ h4.resultTitle {
 }
 
 .slide-enter {
-  opacity: 0.5;
 }
 
 .slide-enter-active {
@@ -307,10 +306,8 @@ h4.resultTitle {
 }
 
 .slide-exit {
-  opacity: 0.5;
 }
 
 .slide-exit-active {
-  opacity: 0;
   animation: reRender 200ms ease-in;
 }
