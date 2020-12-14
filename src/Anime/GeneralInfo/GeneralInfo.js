@@ -5,10 +5,12 @@ import { useHistory } from "react-router-dom";
 import { Authentication } from "../../Authentication/Authentication";
 
 const GeneralInfo = ({ anime, searchResult, styles }) => {
+  // Hooks for controlling the state
   const authContext = useContext(Authentication);
   const [added, setAdded] = useState();
   const history = useHistory();
 
+  // Bunching up removing and adding favorites here to save lines of code
   const addRemoveFavorite = () => {
     if (added) {
       authContext.removeFavorite(anime.mal_id);
@@ -23,6 +25,7 @@ const GeneralInfo = ({ anime, searchResult, styles }) => {
     history.push("/Anime");
   };
 
+  // This is her to conditinally render the text of the button
   useEffect(() => {
     if (authContext.searchList(anime.mal_id)) {
       setAdded(true);
@@ -57,7 +60,11 @@ const GeneralInfo = ({ anime, searchResult, styles }) => {
         </div>
 
         <Button variant="contained" onClick={() => addRemoveFavorite()}>
-          {added ? "Remove" : "Add"}
+          {
+            added
+              ? "Remove"
+              : "Add" /*This is what determines which text to use.*/
+          }
         </Button>
 
         <Typography className="score">
