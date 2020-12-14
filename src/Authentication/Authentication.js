@@ -165,7 +165,7 @@ const AuthProvider = ({ children }) => {
     },
     [dispatch]
   );
-
+  // This useEffect makes sure to load and save the favorite list every time a rerender is made (basically whenever the button in GeneralInfo needs to change its text)
   useEffect(() => {
     const jikanApi = axios.create({
       baseURL: "https://api.jikan.moe/v3/",
