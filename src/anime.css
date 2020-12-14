@@ -289,10 +289,19 @@ h4.resultTitle {
 }
 
 @keyframes reRender {
-  from {
+  0% {
     width: 0;
   }
-  to {
+  25% {
+    width: 25%;
+  }
+  50% {
+    width: 50%;
+  }
+  75% {
+    width: 25%;
+  }
+  100% {
     width: 100%;
   }
 }
@@ -301,12 +310,12 @@ h4.resultTitle {
 }
 
 .slide-enter-active {
-  animation: reRender 200ms ease-in;
+  animation: reRender 5s ease-in;
 }
 
 .slide-exit {
 }
 
 .slide-exit-active {
-  animation: reRender 200ms ease-in;
+  animation: reRender 5s ease-in;
 }
