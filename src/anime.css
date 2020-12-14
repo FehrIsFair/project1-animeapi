@@ -301,7 +301,6 @@ h4.resultTitle {
 }
 
 .slide-enter-active {
-  opacity: 1;
   animation: reRender 200ms ease-in;
 }
 
