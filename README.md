@@ -61,3 +61,7 @@ Navigation.js holds all the logic for manuvering around the sight. It conditinal
 ### Authentication.js
 
 Authentication.js is where the context and all the logic of the previous components is stored. It's also how the user authenticates. Again, as stated above, the authentication uses firebase. You will need to make a .env file with the appropriate keys to ensure the app works correctly.
+
+### GeneralInfo.js
+
+GeneralInfo.js was created to simplify both Search.js and Anime.js. There was an intention to use it for FavoriteList.js but it caused an infinite loop when implemented. It holds the synopsis, title, promotional art, score, and add to/remove from favorites button.

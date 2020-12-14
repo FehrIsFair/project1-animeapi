@@ -232,6 +232,7 @@ const AuthProvider = ({ children }) => {
         favorite: favorite,
         clicked: clicked,
         favoriteList: list,
+        user: app.auth().currentUser,
       }}
     >
       {children}
